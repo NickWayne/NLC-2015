@@ -172,10 +172,5 @@ class World(object):
     def instantiate_projectile(self, pos, angle, vel, bool_enemy, bool_player = False):
         self.bullet_list.append(Shot.Shot(pos, angle, vel, bool_enemy, bool_player))
 
-    def test(self):
-        """THIS COMMENT IS FOR A COMMIT. IMAGINE
-            HOW FUCKING COOL WE ARE WHEN USING GIT"""
-        print "dur da dur"
-
 def vec_to_int(vec):
     return int(vec.x), int(vec.y)
