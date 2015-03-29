@@ -1,0 +1,108 @@
+import pygame
+from pygame.locals import *
+import time
+pygame.init()
+
+from vector2 import Vector2 as vec2
+
+from World import World
+import random
+
+"""
+PROMPT:
+
+You are a computer virus tracker.
+You live inside a computer and travel the network looking for viruses and malware.
+When some are detected, you have to travel to the infection site and
+launch anti-virus software discs at the malware minions.
+Escalate the adventure from basic network bugs to a Web Bot boss.
+Take note in design to include computer networking structure and devices.
+"""
+
+"""screen size"""
+screen_size = w, h = (1000, 600)
+
+"""Set up display"""
+screen = pygame.display.set_mode(screen_size)
+pygame.display.set_caption("SLC Game")
+
+"""set up the game handler"""
+main_world = World(screen_size)
+
+"""set up the game clock"""
+clock = pygame.time.Clock()
+
+"""main game loop"""
+done = False
+while not done:
+
+    """get the time (in seconds) since the last frame.
+        Used for movement based on time."""
+    time_passed_seconds = clock.tick(120)/1000.0
+    mouse_pos = vec2(*pygame.mouse.get_pos())
+
+    """Get every event that has happened since the last frame and loop through it."""
+    for event in pygame.event.get():
+        if event.type == QUIT:
+            done = True
+        
+        """This is separate from the pressed keys because this is just a single event
+            rather than every frame the key is pressed down. Good for events you only
+            want happening once."""
+        if event.type == KEYDOWN:
+            if event.key == K_ESCAPE:
+                done = True
+
+            """Screenshots"""
+            if event.key == K_F2:
+                random_string = ""
+                for i in range(10):
+                    random_string+=str(random.randint(0,9))
+                    pygame.image.save(screen, random_string+".png")
+
+    movement = vec2()
+    pressed_keys = pygame.key.get_pressed()
+    if pressed_keys[K_a]:
+        movement.x -= 1
+    if pressed_keys[K_d]:
+        movement.x += 1
+
+    if pressed_keys[K_w]:
+        movement.y -= 1
+    if pressed_keys[K_s]:
+        movement.y += 1
+
+    pressed_buttons = pygame.mouse.get_pressed()
+    if pressed_buttons[0]:
+        main_world.player.shoot(mouse_pos)
+
+    """Update below here"""
+    main_world.update(mouse_pos, movement, time_passed_seconds)
+
+    """Render below here"""
+    screen.fill((0, 0, 0))
+
+    main_world.render(screen)
+
+    fps_string = "[FPS: {:.4}]".format(clock.get_fps())
+    pygame.display.set_caption(fps_string)
+
+    if main_world.game_over:
+        screen.fill((0,0,0))
+        main_font = pygame.font.Font(None, 40)
+        screen.blit(main_font.render(("GAME OVER!"),True,(0,0,204)),(400,300))
+        pygame.display.flip()
+        time.sleep(3)
+        done = True
+
+    if main_world.game_won:
+        screen.fill((0,0,0))
+        main_font = pygame.font.Font(None, 40)
+        screen.blit(main_font.render(("YOU WON!"),True,(0,0,204)),(400,300))
+        pygame.display.flip()
+        time.sleep(3)
+        done = True
+
+    pygame.display.flip()
+
+pygame.quit()

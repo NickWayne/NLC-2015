@@ -1,0 +1,163 @@
+import pygame
+from pygame.locals import *
+pygame.init()
+
+import VoronoiMapGen as vmg
+from midpointDisplacement import *
+
+w=h=512
+screen = pygame.display.set_mode((w,h))
+
+marchingImg = pygame.image.load("testing.png").convert()
+#totalImg = pygame.image.load("res/tiles.png").convert()
+#img1 = totalImg.subsurface((0,0,16,16))
+#img2 = totalImg.subsurface((16,0,16,16))
+
+
+def wholeFreakingMap():
+    
+    detail = 7
+    TotalSize =  2**detail
+
+    scale = .5
+    
+    seed = random.randint(0,10000)
+    print "got seed",seedo
+    random.seed(seed)
+    print "applied seed"
+    gener = vmg.mapGen()
+    print "created map gen class instance"
+    
+    gen = terrain(detail, scale)
+    print "created terriain class instance"
+    gen.generate(512/TotalSize)
+    print "created midpoint displacement map"
+    
+    gen2 = terrain(detail, scale)
+    print "created second terrain class instance"
+    gen2.generate(512/TotalSize)
+    print "created second midpoint displacement map"
+    
+    random.seed(seed)
+    print "applied seed"
+    vorMap = gener.whole_new(25, size = (TotalSize+1,TotalSize+1), c1=-1,c2=1)
+    print "generated whole new voronoi map"
+    
+    random.seed(seed)
+    print "applied seed"
+    flatMap = gener.flat(25, size = (TotalSize+1, TotalSize+1))
+    print "generated flat map"
+    
+    vorMap = gener.multiplyArray(flatMap,vorMap)
+    print "multiplied array values"
+    newArray = gen.pertubate(vorMap, gen2.map)
+    print "pertubated complete"
+    
+    newTotal = gen.addArrayValues(newArray, gen.map)
+    print "added array values"
+    
+    newTotal = gen.addArrayValues(newTotal, newTotal)
+    print "added array values"
+
+    return newTotal
+
+grandSize = 32
+
+class tile:
+    
+    def __init__(self, pos):
+        self.tl = 8
+        self.tr = 4
+        self.br = 2
+        self.bl = 1
+        self.on = False
+        self.pos = pos
+        
+    def update(self, dataMap):
+        total = 0
+        size = grandSize
+        x,y = self.pos
+        if dataMap[x][y].on:total+=self.tl
+        if dataMap[x+1][y].on:total+=self.tr
+        if dataMap[x+1][y+1].on:total+=self.br
+        if dataMap[x][y+1].on:total+=self.bl
+        newY = total//4
+        newX = total%4
+        
+        self.img = marchingImg.subsurface(newX*32,newY*32,32,32)
+        self.img = pygame.transform.scale(self.img, (size,size))
+        
+    def render(self, surface):
+        surface.blit(self.img, (self.pos[0]*grandSize,self.pos[1]*grandSize))
+        
+tileMap = [[tile((x,y)) for y in range(512/grandSize+1)] for x in range(512/grandSize+1)]
+
+gen = terrain(7, .5)
+gen.generate((512/grandSize+1))
+gener = vmg.mapGen()
+vorMap = gener.whole_new(25, size = ((512/grandSize+1),(512/grandSize+1)), c1=-1,c2=1)
+final = gen.addArrayValues(gen.map, vorMap)
+for y in range(len(final)):
+    for x in range(len(final[y])):
+        if final[x][y] > 100:
+            tileMap[x][y].on = True
+
+
+lst = []
+done = False
+while not done:
+    for event in pygame.event.get():
+        if event.type == QUIT:
+            done = True
+            
+        if event.type == KEYDOWN:
+            if event.key == K_ESCAPE:
+                done = True
+            
+            if event.key == K_F2:
+                pygame.image.save(screen, "SCREENSHOT.png")
+
+            if event.key == K_s:
+                for y in range(len(tileMap)):
+                    lst.append([])
+                    for x in range(len(tileMap[y])):
+                        if tileMap[x][y].on == True:
+                            lst[y].append(1)
+                        else:
+                            lst[y].append(0)
+
+                print lst
+                with open("map.txt","w") as f :
+                    for i in lst:
+                        for g in i:
+                            g = str(g)
+                            a = g.replace("[","")
+                            b = a.replace("]","")
+                            c = b.replace(",","")
+                            f.write(str(c))
+                        f.write("\n")
+
+
+
+            
+    pressed = pygame.mouse.get_pressed()
+
+
+    if pressed[0]:
+        posX,posY = pygame.mouse.get_pos()
+        tileMap[posX//grandSize][posY//grandSize].on = 1
+    elif pressed[2]:
+        posX,posY = pygame.mouse.get_pos()
+        tileMap[posX//grandSize][posY//grandSize].on = 0
+            
+    screen.fill((255,255,255))
+    for y in range(512/grandSize):
+        for x in range(512/grandSize):
+            TILE = tileMap[x][y]
+            TILE.update(tileMap)
+            TILE.render(screen)
+            
+    pygame.display.update()
+    
+pygame.quit()
+    
