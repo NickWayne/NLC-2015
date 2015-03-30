@@ -92,8 +92,8 @@ class World(object):
         old_pos = self.player.pos.copy()
         self.player.update(mouse_pos, movement, tick)
 
-        x, y = int(self.player.pos.x // self.main_map.each_size),
-        int(self.player.pos.y // self.main_map.each_size)
+        x, y = (int(self.player.pos.x // self.main_map.each_size),
+                int(self.player.pos.y // self.main_map.each_size))
 
         offset = vec2(self.player.pos.x % self.main_map.each_size,
                     self.player.pos.y % self.main_map.each_size)
@@ -129,8 +129,7 @@ class World(object):
         self.player.render(surface, self.main_camera)
 
         health_string = "Player Health: " + str(self.player.health)
-        surface.blit(self.main_font.render(health_string), True,
-                (0, 204, 0), (100, 500))
+        surface.blit(self.main_font.render(health_string, True, (0, 204, 0)), (100, 500))
 
     def set_up_demo(self):
         enemy_file = open("maps/enemymap.txt", "r")
