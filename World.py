@@ -1,17 +1,15 @@
 import pygame
 
-from Enemies import BaseEnemy
 from Virus import Virus
 from Spam import Spam
-from ImageFuncs import *
-from Player import *
-from Shot import *
-from Boss import *
-from Rootkit import *
-from Camera import *
+from ImageFuncs import ImageFuncs
+from Player import Player
+from Shot import Shot
+from Boss import Boss
+from Rootkit import Rootkit
+from Camera import Camera
 from WorldMap import WorldMap
-import random
-
+from vector2 import Vector2 as vec2
 
 class World(object):
 
@@ -28,7 +26,7 @@ class World(object):
 
         self.player_image = self.image_funcs.get_image(0, 0)
         self.player = Player(self, self.player_image, (512, 512))
-        
+
         self.render_boss = False
         self.game_won = False
         self.game_over = False
@@ -42,22 +40,22 @@ class World(object):
         self.map_filename = "maps/map.txt"
         self.marching_image = pygame.image.load("maps/testing.png").convert()
         self.marching_image.set_colorkey((255, 0, 255))
-        self.main_map = WorldMap(self, (32,32), 256)
+        self.main_map = WorldMap(self, (32, 32), 256)
         self.main_map.update()
 
         self.set_up_demo()
         self.back = pygame.image.load("res/back.png").convert()
-        self.back2= pygame.image.load("res/back2.png").convert()
+        self.back2 = pygame.image.load("res/back2.png").convert()
 
         self.candy_filename = "maps/candymap.txt"
         self.candy_list = []
-        with open(self.candy_filename) as f:
-            for row in f.readlines():
+        with open(self.candy_filename) as open_file:
+            for row in open_file.readlines():
                 lst = row.split()
                 pos = (float(lst[0]), float(lst[1]))
                 self.candy_list.append(pos)
 
-        f.close()
+        open_file.close()
 
     def update(self, mouse_pos, movement, tick):
         """Updates all entities and shots. takes
@@ -93,8 +91,16 @@ class World(object):
         """Update player and then camera"""
         old_pos = self.player.pos.copy()
         self.player.update(mouse_pos, movement, tick)
-        if self.main_map.test_collisions(self.player.mask, self.player.pos.copy()):
+
+        x, y = int(self.player.pos.x // self.main_map.each_size),
+        int(self.player.pos.y // self.main_map.each_size)
+
+        offset = vec2(self.player.pos.x % self.main_map.each_size,
+                    self.player.pos.y % self.main_map.each_size)
+
+        if self.main_map.map_array[x][y].mask.overlap(self.player.mask, vec_to_int(offset)):
             self.player.velocity *= -1
+
         movement = self.player.pos - old_pos
         self.main_camera.update(-movement)
 
@@ -110,21 +116,8 @@ class World(object):
             elif dead_ent in self.enemy_list:
                 self.enemy_list.remove(dead_ent)
 
-    def background(self,surface):
-        surface.blit(self.back,(vec2(-500,-500)))
-        if self.main_camera.offset.x >= 0 and self.main_camera.offset.y >= 0:
-            surface.blit(self.back2,(self.main_camera.offset.x,self.main_camera.offset.y))
-        elif self.main_camera.offset.x >= 0 :
-            surface.blit(self.back2,(self.main_camera.offset.x,0))
-        elif self.main_camera.offset.y >= 0:
-            surface.blit(self.back2,(0,self.main_camera.offset.y))
-        else:
-            surface.blit(self.back,(-500,-500))
-            surface.blit(self.back2,(0,0))
-
     def render(self, surface):
 
-        #self.background(surface)
         self.main_map.render(surface, self.main_camera)
 
         for bullet in self.bullet_list:
@@ -134,23 +127,12 @@ class World(object):
             enemy.render(surface, self.main_camera)
 
         self.player.render(surface, self.main_camera)
-            
-        if self.debug_text_on:
-            pass
 
-        surface.blit(self.main_font.render(("Player Health:" + str(self.player.health)),True, (0,204,0)),(100,500))
-
+        health_string = "Player Health: " + str(self.player.health)
+        surface.blit(self.main_font.render(health_string), True,
+                (0, 204, 0), (100, 500))
 
     def set_up_demo(self):
-        num_virus = 0
-        num_spam = 0
-        for i in xrange(num_virus):
-            self.enemy_list.append(Virus(self, vec2(random.randint(0, self.ss[0]),
-                                                    random.randint(0, self.ss[1]))))
-        for i in xrange(num_spam):
-            self.enemy_list.append(Spam(self, vec2(random.randint(0, self.ss[0]),
-                                                   random.randint(0, self.ss[1]))))
-        
         enemy_file = open("maps/enemymap.txt", "r")
         for line in enemy_file.readlines():
             everything = line.split(" ")
@@ -169,8 +151,8 @@ class World(object):
                 self.enemy_list.append(Virus(self, vec2(*pos)))
         enemy_file.close()
 
-    def instantiate_projectile(self, pos, angle, vel, bool_enemy, bool_player = False):
-        self.bullet_list.append(Shot.Shot(pos, angle, vel, bool_enemy, bool_player))
+    def instantiate_projectile(self, pos, angle, vel, bool_enemy, bool_player=False):
+        self.bullet_list.append(Shot(pos, angle, vel, bool_enemy, bool_player))
 
 def vec_to_int(vec):
     return int(vec.x), int(vec.y)
