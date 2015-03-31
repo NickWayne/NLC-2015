@@ -5,7 +5,7 @@ import ani
 from math import sin, cos, radians, atan2, degrees
 import Shot
 import random
-from Enemies import *
+from Enemies import RoamPoint, BaseEnemy
 
 debug = False
 screen_size = vec2(1000, 600)
@@ -14,8 +14,8 @@ class Spam(BaseEnemy):
 
     def __init__(self,world, pos):
         BaseEnemy.__init__(self, world, pos)
-        self.ani = ani.Ani(32,32,world.base_image,.2)
-        self.lst = self.ani.get_lst(6,0,3)
+        self.ani = ani.Ani(32, 32, world.base_image, .2)
+        self.lst = self.ani.get_lst(6, 0, 3)
         self.max_range = 350
         self.attacking_range = 300
         self.scared_range = 250
@@ -40,7 +40,7 @@ class Spam(BaseEnemy):
         """Image variables"""
 
         """Image variables"""
-        self.img = self.world.image_funcs.get_image(0,3)
+        self.img = self.world.image_funcs.get_image(0, 3)
         self.img.set_colorkey((255, 0, 255))
         self.image = self.img
 
@@ -48,7 +48,8 @@ class Spam(BaseEnemy):
 
 
 class Attacking(State):
-    """The enemy can see the player and is actively attacking them them, staying away if possible"""
+    """The enemy can see the player and is actively attacking them them, 
+        staying away if possible"""
 
     def __init__(self, enemy, player):
         State.__init__(self, "attacking")
@@ -63,7 +64,7 @@ class Attacking(State):
             """fire"""
             self.enemy.img = self.enemy.lst[self.enemy.ani.get_frame(tick)]
             self.enemy.image = self.enemy.img
-            self.enemy.img.set_colorkey((255,0,255))
+            self.enemy.img.set_colorkey((255, 0, 255))
 
             if self.enemy.ani.finished == True:
                 self.enemy.ani.finished = False
@@ -73,11 +74,12 @@ class Attacking(State):
                     a = random.randint(int(dx-60), int(dx+60))
                     b = random.randint(int(dy-60), int(dy+60))
                     angle = atan2(b, a)
-                    vel = vec2(cos(angle), sin(angle))*-350
+                    vel = vec2(cos(angle), sin(angle)) * -350
                     temps = Shot.Shot(self.enemy.pos.copy(), angle, vel)
                     temps.img = self.b_img
                     temps.img.set_colorkey((255, 0, 255))
-                    temps.img = pygame.transform.rotate(temps.img, 180-degrees(temps.angle))
+                    temps.img = pygame.transform.rotate(temps.img, 
+                            180 - degrees(temps.angle))
                     temps.rect = temps.img.get_rect()
                     self.enemy.bullet_list.append(temps)
 
@@ -144,7 +146,8 @@ class Roaming(State):
         if self.enemy.get_dist_to(self.enemy.target.pos) < 25:
             while self.enemy.world.main_map.test_collisions_point(self.enemy.target.pos):
                 angle = radians(random.randint(0, 359))
-                self.enemy.target = RoamPoint(self.enemy.pos+vec2(cos(angle), sin(angle))*random.randint(50, 250))
+                self.enemy.target = RoamPoint(self.enemy.pos + vec2(cos(angle), 
+                    sin(angle)) * random.randint(50, 250))
 
     def check_conditions(self):
         if self.enemy.can_see(self.player):
@@ -153,7 +156,8 @@ class Roaming(State):
     def entry_actions(self):
         while self.enemy.world.main_map.test_collisions_point(self.enemy.target.pos):
             angle = radians(random.randint(0, 359))
-            self.enemy.target = RoamPoint(self.enemy.pos+vec2( cos(angle),sin(angle))*random.randint(25, 150))
+            self.enemy.target = RoamPoint(self.enemy.pos + vec2(cos(angle), 
+                sin(angle)) * random.randint(25, 150))
 
     def exit_actions(self):
         pass
