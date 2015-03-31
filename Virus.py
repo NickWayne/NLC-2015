@@ -46,7 +46,7 @@ class Virus(BaseEnemy):
         self.img = self.image
         self.rect = self.img.get_rect()
 
-        self.max_ents = 25
+        self.max_ents = 5
 
         
 class Reproducing(State):
