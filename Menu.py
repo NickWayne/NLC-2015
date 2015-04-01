@@ -46,7 +46,9 @@ class Menu(object):
         if buttons[0]:
             for RECT in self.text_rects:
                 if RECT.collidepoint(pos):
-                    print self.text_rects.index(RECT)
+                    return self.text_rects.index(RECT)
+
+        return None
 
     def render(self, surface):
         """Renders the text stored in the class to the screen"""

@@ -82,7 +82,10 @@ def main():
 
             screen.fill((0, 0, 0))
 
-            main_menu.handle_mouse_input(mouse_pos, pygame.mouse.get_pressed())
+            option = main_menu.handle_mouse_input(mouse_pos, pygame.mouse.get_pressed())
+            if option is not None:
+                if option == 1:
+                    current_state = "game"
 
             main_menu.render(screen)
             
