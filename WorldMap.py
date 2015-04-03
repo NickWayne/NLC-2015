@@ -1,6 +1,6 @@
 import pygame
 from vector2 import Vector2 as vec2
-debug = False
+debug = True
 import random
 
 class WorldMap(object):
