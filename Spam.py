@@ -144,9 +144,8 @@ class Roaming(State):
         self.enemy.velocity += self.enemy.get_vector_to_target() * self.enemy.acceleration * tick
 
         if self.enemy.get_dist_to(self.enemy.target.pos) < 25:
-            while self.enemy.world.main_map.test_collisions_point(self.enemy.target.pos):
-                angle = radians(random.randint(0, 359))
-                self.enemy.target = RoamPoint(self.enemy.pos + vec2(cos(angle), 
+            angle = radians(random.randint(0, 359))
+            self.enemy.target = RoamPoint(self.enemy.pos + vec2(cos(angle), 
                     sin(angle)) * random.randint(50, 250))
 
     def check_conditions(self):
@@ -154,9 +153,8 @@ class Roaming(State):
             return "pursuing"
 
     def entry_actions(self):
-        while self.enemy.world.main_map.test_collisions_point(self.enemy.target.pos):
-            angle = radians(random.randint(0, 359))
-            self.enemy.target = RoamPoint(self.enemy.pos + vec2(cos(angle), 
+        angle = radians(random.randint(0, 359))
+        self.enemy.target = RoamPoint(self.enemy.pos + vec2(cos(angle), 
                 sin(angle)) * random.randint(25, 150))
 
     def exit_actions(self):

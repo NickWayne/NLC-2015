@@ -118,9 +118,8 @@ class Roaming(State):
         self.there = False
         
         if self.enemy.get_dist_to(self.enemy.target.pos) < 25:
-            while self.enemy.world.main_map.test_collisions_point(self.enemy.target.pos):
-                angle = radians(random.randint(0, 359))
-                self.enemy.target = RoamPoint(self.enemy.pos+vec2(cos(angle), sin(angle))*random.randint(50, 250))
+            angle = radians(random.randint(0, 359))
+            self.enemy.target = RoamPoint(self.enemy.pos+vec2(cos(angle), sin(angle))*random.randint(50, 250))
             self.there = True
             
     def check_conditions(self):
@@ -134,9 +133,8 @@ class Roaming(State):
             return "idle"
 
     def entry_actions(self):
-        while self.enemy.world.main_map.test_collisions_point(self.enemy.target.pos):
-            angle = radians(random.randint(0, 359))
-            self.enemy.target = RoamPoint(self.enemy.pos+vec2( cos(angle),sin(angle))*random.randint(25, 150))
+        angle = radians(random.randint(0, 359))
+        self.enemy.target = RoamPoint(self.enemy.pos+vec2( cos(angle),sin(angle))*random.randint(25, 150))
 
     def exit_actions(self):
         pass
