@@ -4,13 +4,15 @@ from StateMachine import *
 from Enemies import *
 from math import sin, cos, radians
 import ani
+from ImageFuncs import ImageFuncs
 
 class Rootkit(BaseEnemy):
 
     def __init__(self, world, pos):
         BaseEnemy.__init__(self, world, pos)
-        self.ani = ani.Ani(32, 32, world.base_image, .2)
-        self.lst = self.ani.get_lst(2,0,2)
+        self.ani = ani.Ani(6, .2)
+        self.imagefuncs = ImageFuncs(32,32,world.base_image)
+        self.lst = self.imagefuncs.get_images(2,0,2)
         self.max_range = 350
         self.attacking_range = 100
         self.scared_range = 0

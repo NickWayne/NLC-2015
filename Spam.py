@@ -1,6 +1,7 @@
 import pygame
 from vector2 import Vector2 as vec2
 from StateMachine import *
+from ImageFuncs import ImageFuncs
 import ani
 from math import sin, cos, radians, atan2, degrees
 import Shot
@@ -14,8 +15,9 @@ class Spam(BaseEnemy):
 
     def __init__(self,world, pos):
         BaseEnemy.__init__(self, world, pos)
-        self.ani = ani.Ani(32, 32, world.base_image, .2)
-        self.lst = self.ani.get_lst(6, 0, 3)
+        self.ani = ani.Ani(6, .2)
+        self.imagefuncs = ImageFuncs(32,32,world.base_image)
+        self.lst = self.imagefuncs.get_images(6,0,3)
         self.max_range = 350
         self.attacking_range = 300
         self.scared_range = 250

@@ -11,6 +11,8 @@ from Camera import Camera
 from WorldMap import WorldMap
 from vector2 import Vector2 as vec2
 
+debug = False
+
 class World(object):
 
     def __init__(self, screen_size):
@@ -100,6 +102,18 @@ class World(object):
 
         if self.main_map.map_array[x][y].mask.overlap(self.player.mask, vec_to_int(offset)):
             self.player.velocity *= -1
+
+        if debug == True:
+            for i in self.bullet_list:
+                if i.bool_enemy == False:
+                    x, y = (int(i.pos.x // self.main_map.each_size),
+                            int(i.pos.y // self.main_map.each_size))
+
+                    offset = vec2(i.pos.x % self.main_map.each_size,
+                                i.pos.y % self.main_map.each_size)
+                    i.get_mask()
+                    if self.main_map.map_array[x][y].mask.overlap(i.mask, vec_to_int(offset)):
+                        i.vel = vec2()
 
         movement = self.player.pos - old_pos
         self.main_camera.update(-movement)
