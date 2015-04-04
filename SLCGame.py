@@ -50,6 +50,7 @@ def main():
     while not done:
         """main game loop"""
 
+        to_debug = False
         time_passed_seconds = clock.tick(target_fps) / 1000.0
         pos = pygame.mouse.get_pos()
         mouse_pos = vec2(pos[0], pos[1])
@@ -78,6 +79,9 @@ def main():
                         random_string += str(random.randint(0, 9))
                         pygame.image.save(screen, random_string + ".png")
 
+                elif event.key == pygame.K_g:
+                    to_debug = True
+
         if current_state == "menu":
 
             screen.fill((0, 0, 0))
@@ -85,7 +89,23 @@ def main():
             option = main_menu.handle_mouse_input(mouse_pos, pygame.mouse.get_pressed())
             if option is not None:
                 if option == 1:
+                    """start"""
                     current_state = "game"
+
+                elif option == 2:
+                    """tutorial"""
+                    pass
+
+                elif option == 3:
+                    """help"""
+                    pass
+
+                elif option == 4:
+                    """credits"""
+                    pass
+
+                elif option == 5:
+                    done = True
 
             main_menu.render(screen)
             
@@ -109,7 +129,7 @@ def main():
                 main_world.player.shoot(mouse_pos)
 
             """Update"""
-            main_world.update(mouse_pos, movement, time_passed_seconds)
+            main_world.update(mouse_pos, movement, time_passed_seconds, to_debug)
 
             """Render"""
             screen.fill((0, 0, 0))
@@ -138,7 +158,7 @@ def main():
             
             sleep_timer -= time_passed_seconds
             if sleep_timer <= 0:
-                done = True
+                current_state = "menu"
 
         elif current_state == "win":
             screen.fill((0, 0, 0))
@@ -150,7 +170,7 @@ def main():
             
             sleep_timer -= time_passed_seconds
             if sleep_timer <= 0:
-                done = True
+                current_state = "menu"
 
     pygame.quit()
 
