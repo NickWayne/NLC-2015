@@ -13,7 +13,7 @@ class Menu(object):
         self.header_font = pygame.font.Font(None, 50)
         self.footer_font = pygame.font.Font(None, 15)
 
-        self.texts = ["start", "tutorial", "help", "credits"]
+        self.texts = ["start", "tutorial", "help", "credits", "quit"]
 
         self.title = "NLC Game 2015"
 
@@ -38,7 +38,7 @@ class Menu(object):
 
         self.footer_render = self.footer_font.render(self.footer, True, (255, 255, 255))
         self.footer_rect = self.footer_render.get_rect()
-        self.footer_rect.center = (500, 500 - self.footer_rect.h)
+        self.footer_rect.center = (500, 600 - self.footer_rect.h)
         
         self.text_rects.append(self.footer_rect)
 
