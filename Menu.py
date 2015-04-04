@@ -13,9 +13,9 @@ class Menu(object):
         self.header_font = pygame.font.Font(None, 50)
         self.footer_font = pygame.font.Font(None, 15)
 
-        self.texts = ["start", "tutorial", "help", "credits", "quit"]
+        self.texts = ["START", "TUTORIAL", "HELP", "CREDITS", "QUIT"]
 
-        self.title = "NLC Game 2015"
+        self.title = "NLC Game and Simulation Submission - 2015"
 
         self.footer = "Open source project. NickandNicksGames 2015"
 

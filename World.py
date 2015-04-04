@@ -10,6 +10,7 @@ from Rootkit import Rootkit
 from Camera import Camera
 from WorldMap import WorldMap
 from vector2 import Vector2 as vec2
+from math import ceil
 
 class World(object):
 
@@ -24,8 +25,8 @@ class World(object):
         self.bullet_list = []
         self.enemy_list = []
 
-        self.player_image = self.image_funcs.get_image(0, 0)
-        self.player = Player(self, self.player_image, (512, 512))
+        self.player_image = self.image_funcs.get_image(3, 0)
+        self.player = Player(self, self.player_image, (0, 0))
 
         self.render_boss = False
         self.game_won = False
@@ -37,27 +38,32 @@ class World(object):
         self.main_font = pygame.font.Font(None, 25)
         self.debug_text_on = False
 
-        self.map_filename = "maps/map.txt"
+        levels = ["tutorial1", "tutorial2", "map", "testingSpawn"]
+        level = levels[2]
+
+        self.map_filename = "maps/"+level+".txt"
         self.marching_image = pygame.image.load("maps/testing.png").convert()
         self.marching_image.set_colorkey((255, 0, 255))
         self.main_map = WorldMap(self, (32, 32), 256)
         self.main_map.update()
 
-        self.set_up_demo()
+        self.set_up_demo(level)
         self.back = pygame.image.load("res/back.png").convert()
         self.back2 = pygame.image.load("res/back2.png").convert()
 
-        self.candy_filename = "maps/candymap.txt"
-        self.candy_list = []
+        self.candy_filename = "maps/"+level+"-startgoals.txt"
         with open(self.candy_filename) as open_file:
+            row_index = 0
             for row in open_file.readlines():
                 lst = row.split()
-                pos = (float(lst[0]), float(lst[1]))
-                self.candy_list.append(pos)
+                pos = (float(lst[0]) * 256, float(lst[1]) * 256)
+                if row_index == 0:
+                    self.main_camera.offset -= pos
+                    self.player.pos = vec2(*pos)
 
         open_file.close()
 
-    def update(self, mouse_pos, movement, tick):
+    def update(self, mouse_pos, movement, tick, to_debug=False):
         """Updates all entities and shots. takes
             arguments for the position of the mouse,
             the player movement vector, and the
@@ -92,14 +98,23 @@ class World(object):
         old_pos = self.player.pos.copy()
         self.player.update(mouse_pos, movement, tick)
 
-        x, y = (int(self.player.pos.x // self.main_map.each_size),
-                int(self.player.pos.y // self.main_map.each_size))
+        x, y = (int(self.player.pos.x / self.main_map.each_size),
+                int(self.player.pos.y / self.main_map.each_size))
 
         offset = vec2(self.player.pos.x % self.main_map.each_size,
                     self.player.pos.y % self.main_map.each_size)
 
+        if to_debug:
+            print "x, y:",x,y
+            print "player pos:",self.player.pos
+            print "each_size:",self.main_map.each_size
+            print "offset:",offset
+            print "camera pos:",self.main_camera.offset
+            print ""
+
         if self.main_map.map_array[x][y].mask.overlap(self.player.mask, vec_to_int(offset)):
             self.player.velocity *= -1
+            #pass
 
         movement = self.player.pos - old_pos
         self.main_camera.update(-movement)
@@ -131,8 +146,8 @@ class World(object):
         health_string = "Player Health: " + str(self.player.health)
         surface.blit(self.main_font.render(health_string, True, (0, 204, 0)), (100, 500))
 
-    def set_up_demo(self):
-        enemy_file = open("maps/enemymap.txt", "r")
+    def set_up_demo(self, level_name):
+        enemy_file = open("maps/"+level_name+"-enemymap.txt", "r")
         for line in enemy_file.readlines():
             everything = line.split(" ")
             if len(everything) > 3:
@@ -146,7 +161,7 @@ class World(object):
                 self.enemy_list.append(Boss(self, vec2(*pos)))
             elif e_type == 'r':
                 self.enemy_list.append(Rootkit(self, vec2(*pos)))
-            else:
+            elif e_type == 'v':
                 self.enemy_list.append(Virus(self, vec2(*pos)))
         enemy_file.close()
 

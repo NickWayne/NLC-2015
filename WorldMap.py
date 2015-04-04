@@ -1,6 +1,6 @@
 import pygame
 from vector2 import Vector2 as vec2
-debug = True
+debug = False
 import random
 
 class WorldMap(object):
@@ -8,23 +8,24 @@ class WorldMap(object):
     def __init__(self, world, size, each_size):
         self.map_filename = world.map_filename
         self.map_image = world.marching_image
-        self.map_array = [[self.Tile((j, i),
-                                     each_size, self.map_image) for i in xrange(size[0])] for j in xrange(size[1])]
+        self.map_array = [[self.Tile((j, i), each_size, self.map_image) for i in xrange(size[0])] for j in xrange(size[1])]
 
         self.map_file = open(self.map_filename, "r")
 
         self.map_render = None
         self.map_mask = None
 
-        x = y = 0
+        y = 0
         for line in self.map_file.readlines():
             x = 0
             for character in line:
                 try:
                     self.map_array[x][y].on = bool(int(character))
+                    print int(self.map_array[x][y].on),
                 except ValueError:
                     pass
                 x += 1
+            print ""
             y += 1
 
         self.map_file.close()
@@ -38,16 +39,6 @@ class WorldMap(object):
                 tile.update(self.map_array)
 
     def test_collisions(self, other_mask, other_pos):
-        """
-        if self.map_mask is None:
-            print "e"
-            return False
-            #self.map_mask = pygame.mask.from_surface(self.map_render)
-
-        if self.map_mask.overlap(other_mask, (int(-other_pos.x), int(-other_pos.y))):
-            return True
-        return False
-        """
         for tile_list in self.map_array:
             for tile in tile_list:
                 if tile.test_collision(other_mask, other_pos):
@@ -72,13 +63,11 @@ class WorldMap(object):
             for tile_list in self.map_array:
                 for tile in tile_list:
 
-                    tile.render(self.map_render, camera)
+                    tile.render(self.map_render)
 
-            self.map_mask = pygame.mask.from_threshold(self.map_render, (76,76,76))
-            #pygame.image.save(self.map_render, "full_render.png")
+        surface.blit(self.map_render, camera.offset)
 
-            print self.map_mask.count()
-        surface.blit(self.map_render, camera.offset+vec2(0, 200))
+
     class Tile:
 
         def __init__(self, pos, tile_size, total_image):
@@ -122,14 +111,14 @@ class WorldMap(object):
             offset = (  int(point[0]) - (self.pos[0]) * self.grand_size,
                         int(point[1]) - (self.pos[1]) * self.grand_size)
             offset2 = [offset[0]/self.grand_size, offset[1]/self.grand_size]
-            #print self.pos, offset2
+            
             return self.mask.get_at(offset)
 
-        def render(self, surface, camera):
-            surface.blit(self.img, (self.pos[0]*self.grand_size+int(camera.offset.x),
-                                    self.pos[1]*self.grand_size+int(camera.offset.y)))
+        def render(self, surface):
+            surface.blit(self.img, (self.pos[0]*self.grand_size,
+                                    self.pos[1]*self.grand_size))
 
             if debug:
-                x, y = (self.pos[0]*self.grand_size+int(camera.offset.x),
-                        self.pos[1]*self.grand_size+int(camera.offset.y))
+                x, y = (self.pos[0]*self.grand_size,
+                        self.pos[1]*self.grand_size)
                 pygame.draw.rect(surface,(255,0,0),((x,y),(self.grand_size,self.grand_size)),1)

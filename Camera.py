@@ -4,8 +4,7 @@ class Camera(object):
 
     def __init__(self, world):
         self.world = world
-        self.player = self.world.player
-        self.offset = -self.player.pos.copy()
+        self.offset = vec2()
 
     def update(self, movement):
         self.offset += movement

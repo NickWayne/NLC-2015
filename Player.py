@@ -25,7 +25,7 @@ class Player(object):
         self.mask = pygame.mask.from_surface(self.img)
         self.speed = 250
 
-        self.health = 100
+        self.health = 1000
 
         self.velocity = vec2()
         self.acceleration = 5

@@ -73,12 +73,14 @@ def main():
 
     bool_enemy = False
 
-    options = ["map", "enemies"] 
+    options = ["map", "enemies", "start"] 
     option_index = 0
 
     current_state = options[option_index]
 
     save_map_name = sys.argv[1]
+
+    start_pos = (1, 1)
 
     enemy_lst = []
     lst = []
@@ -122,6 +124,10 @@ def main():
                             f.write(e.to_text() + "\n")
                     f.close()
 
+                    with open(save_map_name+"-startgoals.txt", "w") as f:
+                        f.write(str(start_pos[0]) + " " + str(start_pos[1]) + "\n")
+                    f.close()
+
                 if event.key == K_SPACE:
                     option_index += 1
                     option_index %= len(options)
@@ -144,6 +150,13 @@ def main():
 
                     enemy_lst.append(Enemy_text(character, (posX2, posY2)))
 
+                elif current_state == "start":
+                    posX, posY = pygame.mouse.get_pos()
+                    posX2 = posX / float(grandSize)
+                    posY2 = posY / float(grandSize)
+
+                    start_pos = (posX2, posY2)
+
         pressed = pygame.mouse.get_pressed()
 
         if current_state == "map":
@@ -163,9 +176,11 @@ def main():
 
         for CHARACTER in enemy_lst:
             CHARACTER.render(screen)
-                
+        
+        pygame.draw.circle(screen, (255, 255, 255), (int(start_pos[0] * grandSize), int(start_pos[1] * grandSize)), 8, 2)
+
         pygame.display.update()
-        pygame.display.set_caption(current_state)
+        pygame.display.set_caption("level: " + save_map_name + ". State: " + current_state + ". Hit F3 to save")
         
     pygame.quit()
 

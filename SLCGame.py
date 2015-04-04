@@ -65,7 +65,8 @@ def main():
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
-                    done = True
+                    #done = True
+                    current_state = "menu"
                     """This is separate from the pressed keys because
                     this is just a single event rather than every frame
                     the key is pressed down. Good for events you only
