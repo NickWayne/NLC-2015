@@ -36,6 +36,9 @@ class Shot(object):
 
         return False
 
+    def get_mask(self):
+        self.mask = pygame.mask.from_surface(self.img)
+
     def render(self, surface, camera):
         self.rect.center = self.pos + camera.offset
         surface.blit(self.img, self.rect)

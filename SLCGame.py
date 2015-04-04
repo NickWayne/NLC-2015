@@ -130,7 +130,7 @@ def main():
                 main_world.player.shoot(mouse_pos)
 
             """Update"""
-            main_world.update(mouse_pos, movement, time_passed_seconds, to_debug)
+            main_world.update(mouse_pos, movement, time_passed_seconds)
 
             """Render"""
             screen.fill((0, 0, 0))

@@ -8,6 +8,7 @@ import random
 from Enemies import BaseEnemy, RoamPoint, Roaming
 from Spam import *
 from Virus import *
+from ani import Ani
 
 debug = False
 screen_size = vec2(1000, 600)
@@ -27,6 +28,7 @@ class Boss(BaseEnemy):
         self.base_health = self.health
         self.reload_max = 3
         self.reload = self.reload_max
+        self.animate = False
 
         """AI variables"""
         self.attacking_state = Attacking(self, self.player)
@@ -41,9 +43,12 @@ class Boss(BaseEnemy):
         self.lst2 = []
 
         """Image variables"""
+        self.ani = Ani(12,.1)
+
+
         a = 0
         b = 0
-        for i in range(2):
+        for i in range(3):
             for g in range(4):
                 self.lst.append(self.world.image_funcs.get_irregular_image(5,5,b,a+5))
                 b+=5
@@ -55,6 +60,8 @@ class Boss(BaseEnemy):
         self.image = self.img
 
         self.rect = self.img.get_rect()
+    def update_collisions(self, enemy_list):
+        pass
 
 
 class Idle(State):
@@ -92,23 +99,6 @@ class Attacking(State):
         if self.enemy.dead == True:
             self.enemy.world.game_win = True
 
-        if self.enemy.health <= self.enemy.base_health * .80:
-            self.enemy.img = self.enemy.lst[1]
-            self.enemy.img.set_colorkey((255,0,255))
-            if self.enemy.health <= self.enemy.base_health * .60:
-                self.enemy.img = self.enemy.lst[2]
-                self.enemy.img.set_colorkey((255,0,255))
-                if self.enemy.health <= self.enemy.base_health * .40:
-                    self.enemy.img = self.enemy.lst[3]
-                    self.enemy.img.set_colorkey((255,0,255))
-                    if self.enemy.health <= self.enemy.base_health * .20:
-                        self.enemy.img = self.enemy.lst[4]
-                        self.enemy.img.set_colorkey((255,0,255))
-                        if self.enemy.health <= self.enemy.base_health * 0:
-                            self.enemy.img = self.enemy.lst[5]
-                            self.enemy.img.set_colorkey((255,0,255))
-                            self.enemy.world.game_won = True
-                            return
         self.enemy.reload -= tick
 
         if self.enemy.reload <= 0:
@@ -120,13 +110,22 @@ class Attacking(State):
                     vel = vec2(cos(angle), sin(angle))*-350
                     self.enemy.bullet_list.append(Shot.Shot(self.enemy.pos.copy(), angle, vel))
             self.enemy.reload = self.enemy.reload_max
+        if self.enemy.animate == False:
+            if random.randint(0,int((1/tick)*1))==0:
+                self.enemy.animate = True
+        else:
+            self.enemy.img = self.enemy.lst[self.enemy.ani.get_full_frame(tick)]
+            self.enemy.img.set_colorkey((255,0,255))
+            if self.enemy.ani.run == 1:
+                for i in range(3):
+                    angle = radians(random.randint(0,359))
+                    dist = random.randint(40, 100)
+                    vec = self.enemy.pos.copy() + vec2(cos(angle) * dist, sin(angle) * dist)
+                    if random.randint(0, 1):
+                        self.enemy.world.enemy_list.append(Spam(self.enemy.world, vec))
+                    else:
+                        self.enemy.world.enemy_list.append(Virus(self.enemy.world, vec))
+            if self.enemy.ani.finished == True:
+                self.enemy.ani.reset()
+                self.enemy.animate = False
 
-        if random.randint(0,int((1/tick)*5))==0:
-            for i in range(3):
-                angle = radians(random.randint(0,359))
-                dist = random.randint(40, 100)
-                vec = self.enemy.pos.copy() + vec2(cos(angle) * dist, sin(angle) * dist)
-                if random.randint(0, 1):
-                    self.enemy.world.enemy_list.append(Spam(self.enemy.world, vec))
-                else:
-                    self.enemy.world.enemy_list.append(Virus(self.enemy.world, vec))

@@ -60,12 +60,20 @@ class Reproducing(State):
         pass
 
     def do_actions(self, tick):
+        v_lst = []
         self.enemy.food += tick
-        if self.enemy.food > 2 and len(self.enemy.world.enemy_list) < self.enemy.max_ents:
+        for i in self.enemy.world.enemy_list:
+            try:
+                if i.max_virus == self.enemy.max_virus:
+                    v_lst.append(i)
+            except Exception:
+                pass
+        if self.enemy.food > 3.14159 and len(v_lst) < self.enemy.max_virus:
             new_virus = Virus(self.enemy.world, self.enemy.pos.copy()+vec2(random.random(), random.random()))
             self.enemy.food = 0
-
             self.enemy.world.enemy_list.append(new_virus)
+
+
 
     def check_conditions(self):
         if self.enemy.get_dist_to(self.player.pos) < self.enemy.attacking_range:
