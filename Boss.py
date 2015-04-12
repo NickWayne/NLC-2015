@@ -25,6 +25,7 @@ class Boss(BaseEnemy):
         self.ranged = True
         self.dead = False
         self.health = 1500
+        self.health_max = self.health
         self.base_health = self.health
         self.reload_max = 3
         self.reload = self.reload_max

@@ -27,7 +27,7 @@ class World(object):
         self.bullet_list = []
         self.enemy_list = []
 
-        self.player_image = self.image_funcs.get_image(3, 0)
+        self.player_image = self.image_funcs.get_image(0, 0)
         self.player = Player(self, self.player_image, (0, 0))
 
         self.render_boss = False
@@ -117,6 +117,17 @@ class World(object):
         if self.main_map.map_array[x][y].mask.overlap(self.player.mask, vec_to_int(offset)):
             self.player.velocity *= -1
             #pass
+
+        for i in self.bullet_list:
+            if i.bool_enemy == False:
+                x, y = (int(i.pos.x // self.main_map.each_size),
+                        int(i.pos.y // self.main_map.each_size))
+
+                offset = vec2(i.pos.x % self.main_map.each_size,
+                            i.pos.y % self.main_map.each_size)
+                i.get_mask()
+                if self.main_map.map_array[x][y].mask.overlap(i.mask, vec_to_int(offset)):
+                    i.dead = True
 
         if debug == True:
             for i in self.bullet_list:

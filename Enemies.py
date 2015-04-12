@@ -34,6 +34,7 @@ class BaseEnemy(object):
         self.mask = None
         self.look_ahead = 50
         self.health = 50
+        self.health_max = self.health
 
         """AI variables"""
         self.brain = StateMachine()
@@ -95,6 +96,13 @@ class BaseEnemy(object):
         angle = random.uniform(0, 2*pi)
         self.target = RoamPoint(self.clamp_vec(self.pos+vec2(cos(angle), sin(angle))*random.randint(50, 250)))
 
+    def health_bar(self, screen):
+        width = int((self.img.get_width()/2)*(self.health/float(self.health_max)))
+        pos = (self.rect.center[0]-(self.img.get_width()/2),self.rect.center[1]+(self.img.get_height()/2)+5)
+        w,h = (self.img.get_width(),5)
+        pygame.draw.rect(screen,(255,0,0),((pos),(w,h)),0)
+        pygame.draw.rect(screen,(0,255,0),((pos),(w*(self.health/float(self.health_max)),h)),0)
+
     def rot_center(self):
         angle = self.get_angle_to_target()
         angle = 180-degrees(angle)
@@ -147,6 +155,7 @@ class BaseEnemy(object):
 
         self.rect.center = self.pos + camera.offset
         surface.blit(self.img, self.rect)
+        self.health_bar(surface)
 
 
 class RoamPoint(object):
