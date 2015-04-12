@@ -1,4 +1,4 @@
-import pygame
+import pygame,ImageFuncs
 
 
 class Menu(object):
@@ -49,6 +49,22 @@ class Menu(object):
                     return self.text_rects.index(RECT)
 
         return None
+
+    def help_screen(self,screen):
+        screen.fill((0,0,0))
+        self.img = pygame.image.load("res/base.png").convert()
+        self.ImageFuncs = ImageFuncs.ImageFuncs(32,32,self.img)
+        self.img_lst = []
+        self.img_lst.append(self.ImageFuncs.get_image(0,1))
+        self.img_lst.append(self.ImageFuncs.get_image(1,2))
+        self.img_lst.append(self.ImageFuncs.get_image(0,2))
+        self.img_lst.append(self.ImageFuncs.get_image(2,2))
+
+        for i in self.img_lst:
+            i.set_colorkey((255,0,255))
+            index = self.img_lst.index(i)
+            screen.blit(i,(200, 100 + i.get_height() * index * 3))
+
 
     def render(self, surface):
         """Renders the text stored in the class to the screen"""

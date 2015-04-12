@@ -41,7 +41,7 @@ def main():
 
     target_fps = 120.0
 
-    game_states = ["menu", "game", "win", "lose"]
+    game_states = ["menu", "game", "help", "win", "lose"]
     current_state = game_states[0]
 
     sleep_timer = 0
@@ -98,7 +98,7 @@ def main():
                     pass
 
                 elif option == 3:
-                    """help"""
+                    current_state = "help"
                     pass
 
                 elif option == 4:
@@ -111,6 +111,10 @@ def main():
             main_menu.render(screen)
             
             pygame.display.flip()
+
+        elif current_state == "help":
+             main_menu.help_screen(screen)
+             pygame.display.flip()
 
         elif current_state == "game":
             movement = vec2()
