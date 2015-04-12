@@ -72,6 +72,15 @@ class World(object):
         for enemy in self.enemy_list:
             enemy.update(tick)
             enemy.update_collisions(self.enemy_list)
+
+            x, y = (int(enemy.pos.x / self.main_map.each_size),
+                    int(enemy.pos.y / self.main_map.each_size))
+
+            offset = vec2(enemy.pos.x % self.main_map.each_size,
+                        enemy.pos.y % self.main_map.each_size)
+            
+            if self.main_map.map_array[x][y].mask.overlap(enemy.mask, vec_to_int(offset)):
+                enemy.velocity *= -1
             if enemy.dead:
                 to_remove.append(enemy)
 
