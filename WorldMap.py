@@ -21,11 +21,10 @@ class WorldMap(object):
             for character in line:
                 try:
                     self.map_array[x][y].on = bool(int(character))
-                    print int(self.map_array[x][y].on),
                 except ValueError:
+                    """This is to handler the /n at the end of the lines"""
                     pass
                 x += 1
-            print ""
             y += 1
 
         self.map_file.close()

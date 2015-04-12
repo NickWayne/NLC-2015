@@ -73,7 +73,7 @@ def main():
 
     bool_enemy = False
 
-    options = ["map", "enemies", "start"] 
+    options = ["map", "enemies", "start", "goal"] 
     option_index = 0
 
     current_state = options[option_index]
@@ -81,6 +81,7 @@ def main():
     save_map_name = sys.argv[1]
 
     start_pos = (1, 1)
+    goal_pos = (5, 1)
 
     enemy_lst = []
     lst = []
@@ -126,6 +127,7 @@ def main():
 
                     with open(save_map_name+"-startgoals.txt", "w") as f:
                         f.write(str(start_pos[0]) + " " + str(start_pos[1]) + "\n")
+                        f.write(str(goal_pos[0]) + " " + str(goal_pos[1]) + "\n")
                     f.close()
 
                 if event.key == K_SPACE:
@@ -150,12 +152,15 @@ def main():
 
                     enemy_lst.append(Enemy_text(character, (posX2, posY2)))
 
-                elif current_state == "start":
+                elif current_state == "start" or current_state == "goal":
                     posX, posY = pygame.mouse.get_pos()
                     posX2 = posX / float(grandSize)
                     posY2 = posY / float(grandSize)
-
-                    start_pos = (posX2, posY2)
+                    
+                    if current_state == "start":
+                        start_pos = (posX2, posY2)
+                    else:
+                        goal_pos = (posX2, posY2)
 
         pressed = pygame.mouse.get_pressed()
 
@@ -178,6 +183,7 @@ def main():
             CHARACTER.render(screen)
         
         pygame.draw.circle(screen, (255, 255, 255), (int(start_pos[0] * grandSize), int(start_pos[1] * grandSize)), 8, 2)
+        pygame.draw.circle(screen, (0, 255, 0), (int(goal_pos[0] * grandSize), int(goal_pos[1] * grandSize)), 8, 2)
 
         pygame.display.update()
         pygame.display.set_caption("level: " + save_map_name + ". State: " + current_state + ". Hit F3 to save")

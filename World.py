@@ -19,7 +19,6 @@ class World(object):
     def __init__(self, screen_size):
 
         self.ss = screen_size
-        self.counter = 0
 
         self.base_image = pygame.image.load("res/base.png").convert()
         self.image_funcs = ImageFuncs(32, 32, self.base_image)
@@ -27,43 +26,23 @@ class World(object):
         self.bullet_list = []
         self.enemy_list = []
 
-        self.player_image = self.image_funcs.get_image(0, 0)
-        self.player = Player(self, self.player_image, (0, 0))
-
-        self.render_boss = False
+        self.player_image = self.image_funcs.get_image(2, 0)
+        
         self.game_won = False
         self.game_over = False
 
         self.main_camera = Camera(self)
-        self.main_camera.offset += vec2(self.ss[0]/2, self.ss[1]/2)
 
         self.main_font = pygame.font.Font(None, 25)
         self.debug_text_on = False
 
-        levels = ["tutorial1", "tutorial2", "map", "testingSpawn"]
-        level = levels[2]
+        self.levels = ["tutorial1", "tutorial2", "map", "testingSpawn"]
+        self.level_index = 0
+        level = self.levels[0]
 
-        self.map_filename = "maps/"+level+".txt"
-        self.marching_image = pygame.image.load("maps/testing.png").convert()
-        self.marching_image.set_colorkey((255, 0, 255))
-        self.main_map = WorldMap(self, (32, 32), 256)
-        self.main_map.update()
-
-        self.set_up_demo(level)
+        self.set_up_level(level)
         self.back = pygame.image.load("res/back.png").convert()
         self.back2 = pygame.image.load("res/back2.png").convert()
-
-        self.candy_filename = "maps/"+level+"-startgoals.txt"
-        with open(self.candy_filename) as open_file:
-            row_index = 0
-            for row in open_file.readlines():
-                lst = row.split()
-                pos = (float(lst[0]) * 256, float(lst[1]) * 256)
-                if row_index == 0:
-                    self.main_camera.offset -= pos
-                    self.player.pos = vec2(*pos)
-
-        open_file.close()
 
     def update(self, mouse_pos, movement, tick, to_debug=False):
         """Updates all entities and shots. takes
@@ -129,20 +108,12 @@ class World(object):
                 if self.main_map.map_array[x][y].mask.overlap(i.mask, vec_to_int(offset)):
                     i.dead = True
 
-        if debug == True:
-            for i in self.bullet_list:
-                if i.bool_enemy == False:
-                    x, y = (int(i.pos.x // self.main_map.each_size),
-                            int(i.pos.y // self.main_map.each_size))
-
-                    offset = vec2(i.pos.x % self.main_map.each_size,
-                                i.pos.y % self.main_map.each_size)
-                    i.get_mask()
-                    if self.main_map.map_array[x][y].mask.overlap(i.mask, vec_to_int(offset)):
-                        i.vel = vec2()
-
         movement = self.player.pos - old_pos
         self.main_camera.update(-movement)
+
+        if self.goal.check():
+            self.level_index+=1
+            self.set_up_level(self.levels[self.level_index])
 
         if self.player.health <= 0:
             self.game_over = True
@@ -168,10 +139,42 @@ class World(object):
 
         self.player.render(surface, self.main_camera)
 
+        self.goal.render(surface)
+
         health_string = "Player Health: " + str(self.player.health)
         surface.blit(self.main_font.render(health_string, True, (0, 204, 0)), (100, 500))
 
-    def set_up_demo(self, level_name):
+    def set_up_level(self, level_name):
+        #level_name = "map"
+        self.map_filename = "maps/"+level_name+".txt"
+        self.marching_image = pygame.image.load("maps/testing.png").convert()
+        self.marching_image.set_colorkey((255, 0, 255))
+        self.main_map = WorldMap(self, (32, 32), 256)
+        self.main_map.update()
+
+        self.main_camera.offset = vec2(self.ss[0]/2, self.ss[1]/2)
+    
+        self.player = Player(self, self.player_image, (0, 0))
+
+        self.goal = EndPoint(vec2(0,0), self)
+
+        self.candy_filename = "maps/"+level_name+"-startgoals.txt"
+        with open(self.candy_filename) as open_file:
+            row_index = 0
+            for row in open_file.readlines():
+                lst = row.split()
+                pos = (float(lst[0]) * 256, float(lst[1]) * 256)
+                if row_index == 0:
+                    self.main_camera.offset -= pos
+                    self.main_camera.offset -= vec2(16, 16)
+                    self.player.pos = vec2(*pos)
+                elif row_index == 1:
+                    self.goal = EndPoint(vec2(*pos), self)
+
+                row_index += 1
+
+        open_file.close()
+
         enemy_file = open("maps/"+level_name+"-enemymap.txt", "r")
         for line in enemy_file.readlines():
             everything = line.split(" ")
@@ -192,6 +195,23 @@ class World(object):
 
     def instantiate_projectile(self, pos, angle, vel, bool_enemy, bool_player=False):
         self.bullet_list.append(Shot(pos, angle, vel, bool_enemy, bool_player))
+
+
+class EndPoint(object):
+    
+    def __init__(self, pos, world):
+        self.world = world
+        self.pos = pos
+
+    def check(self):
+        if self.pos.get_distance_to(self.world.player.pos) < 16:
+            return True
+
+        return False
+
+    def render(self, surface):
+        pygame.draw.circle(surface, (0, 255, 0), vec_to_int(self.pos + self.world.main_camera.offset), 16, 1)
+        pygame.draw.circle(surface, (0, 128, 0), vec_to_int(self.pos + self.world.main_camera.offset), 17, 1)
 
 def vec_to_int(vec):
     return int(vec.x), int(vec.y)
