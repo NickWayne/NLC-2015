@@ -26,7 +26,7 @@ class World(object):
         self.bullet_list = []
         self.enemy_list = []
 
-        self.player_image = self.image_funcs.get_image(2, 0)
+        self.player_image = self.image_funcs.get_image(0, 0)
         
         self.game_won = False
         self.game_over = False

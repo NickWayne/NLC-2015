@@ -46,6 +46,7 @@ class Sneaking(State):
         State.__init__(self, "sneaking")
         self.enemy = enemy
         self.player = player
+        self.enemy.visible = False
         
     def do_actions(self, tick):
         self.enemy.velocity += self.enemy.get_vector_to_target() * self.enemy.acceleration * tick
@@ -56,7 +57,7 @@ class Sneaking(State):
         self.target = self.player.pos.copy()
 
     def exit_actions(self):
-        pass
+        self.enemy.visible = True
 
     def check_conditions(self):
         if self.enemy.get_dist_to(self.player.pos) < self.enemy.attacking_range:
@@ -84,7 +85,7 @@ class Attacking(State):
             return "sneaking"
 
     def exit_actions(self):
-        pass
+       self.enemy.visible = False
 
 
 class Roaming(State):
