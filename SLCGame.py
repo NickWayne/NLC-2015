@@ -99,7 +99,6 @@ def main():
 
                 elif option == 3:
                     current_state = "help"
-                    pass
 
                 elif option == 4:
                     """credits"""
@@ -113,8 +112,11 @@ def main():
             pygame.display.flip()
 
         elif current_state == "help":
-             main_menu.help_screen(screen)
-             pygame.display.flip()
+            main_menu.help_screen(screen)
+            pressed_keys = pygame.key.get_pressed()
+            if pressed_keys[pygame.K_ESCAPE]:
+                current_state = "menu"
+            pygame.display.flip()
 
         elif current_state == "game":
             movement = vec2()

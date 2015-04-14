@@ -57,13 +57,34 @@ class Menu(object):
         self.img_lst = []
         self.img_lst.append(self.ImageFuncs.get_image(0,1))
         self.img_lst.append(self.ImageFuncs.get_image(1,2))
-        self.img_lst.append(self.ImageFuncs.get_image(0,2))
+        self.img_lst.append(self.ImageFuncs.get_image(0,3))
         self.img_lst.append(self.ImageFuncs.get_image(2,2))
+
+        open_file = open("helptxt.txt", 'r')
+        linelst =[]
+        contents = open_file.readlines()
+        for i in range(len(contents)):
+             linelst.append(contents[i].strip('\n'))
+        for i in linelst:
+            if i == '':
+                linelst.pop(linelst.index(i))
+        open_file.close()
+
+
 
         for i in self.img_lst:
             i.set_colorkey((255,0,255))
             index = self.img_lst.index(i)
-            screen.blit(i,(200, 100 + i.get_height() * index * 3))
+            screen.blit(i,(100, 100 + i.get_height() * index * 3))
+            txt = self.menu_font.render(linelst[index], True, (255, 255, 255))
+            txt_rect = txt.get_rect()
+            txt_rect.midleft = (160,117 + i.get_height() * index * 3)
+            screen.blit(txt,txt_rect)
+
+        txt = self.menu_font.render("Press ESCAPE to go back", True, (255, 0, 255))
+        txt_rect = txt.get_rect()
+        txt_rect.center = (500, 500)
+        screen.blit(txt,txt_rect)
 
 
     def render(self, surface):
