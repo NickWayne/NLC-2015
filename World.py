@@ -137,7 +137,7 @@ class World(object):
             elif dead_ent in self.enemy_list:
                 self.enemy_list.remove(dead_ent)
 
-        self.world_rect = pygame.Rect(-self.main_camera.offset,((-self.main_camera.offset.x)+1000,-(self.main_camera.offset.y)+600))
+        self.world_rect = pygame.Rect((-self.main_camera.offset.x-20,-self.main_camera.offset.y-20),((-self.main_camera.offset.x)+1020,-(self.main_camera.offset.y)+620))
 
     def phealth_bar(self, screen):
         font = pygame.font.Font(None, 15)
@@ -160,7 +160,6 @@ class World(object):
             bullet.render(surface, self.main_camera)
 
         for enemy in self.enemy_list:
-            print enemy.pos, self.world_rect
             if self.world_rect.collidepoint(enemy.pos.x,enemy.pos.y):
                 enemy.render(surface, self.main_camera)
 
