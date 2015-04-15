@@ -12,8 +12,6 @@ from WorldMap import WorldMap
 from vector2 import Vector2 as vec2
 from math import ceil
 
-debug = False
-
 class World(object):
 
     def __init__(self, screen_size):
@@ -38,11 +36,12 @@ class World(object):
 
         self.levels = ["tutorial1", "tutorial2", "map", "testingSpawn"]
         self.level_index = 0
-        level = self.levels[0]
+        level = self.levels[2]
 
         self.set_up_level(level)
         self.back = pygame.image.load("res/back.png").convert()
-        self.back2 = pygame.image.load("res/back2.png").convert()
+        self.UI = pygame.image.load("res/UI.png").convert()
+        self.UI.set_colorkey((255,0,255))
 
     def update(self, mouse_pos, movement, tick, to_debug=False):
         """Updates all entities and shots. takes
@@ -136,8 +135,21 @@ class World(object):
             elif dead_ent in self.enemy_list:
                 self.enemy_list.remove(dead_ent)
 
+    def phealth_bar(self, screen):
+        font = pygame.font.Font(None, 15)
+        pos = (20,560)
+        w,h = (100,20)
+        pygame.draw.rect(screen,(255,0,0),((pos),(w,h)),0)
+        pygame.draw.rect(screen,(0,255,0),((pos),(w*(self.player.health/float(self.player.health_max)),h)),0)
+        string = "%s/%s" %(self.player.health,self.player.health_max)
+        txt = self.main_font.render(str(string), True, (8,59,47))
+        txt_rect = txt.get_rect()
+        txt_rect.midleft = (20,590)
+        screen.blit(txt,txt_rect)
+
     def render(self, surface):
 
+        surface.blit(self.back,(-500,-500))
         self.main_map.render(surface, self.main_camera)
 
         for bullet in self.bullet_list:
@@ -150,8 +162,8 @@ class World(object):
 
         self.goal.render(surface)
 
-        health_string = "Player Health: " + str(self.player.health)
-        surface.blit(self.main_font.render(health_string, True, (0, 204, 0)), (100, 500))
+        surface.blit(self.UI,(0,0))
+        self.phealth_bar(surface)
 
     def set_up_level(self, level_name):
         #level_name = "map"
