@@ -50,6 +50,8 @@ class World(object):
             the player movement vector, and the
             time passed since the last frame."""
 
+        self.world_rect = pygame.Rect((-self.main_camera.offset.x,-self.main_camera.offset.y),(1000,600))
+
         to_remove = []
 
         for bullet in self.bullet_list:
@@ -70,20 +72,20 @@ class World(object):
                 to_remove.append(bullet)
 
         for enemy in self.enemy_list:
-            if self.world_rect.collidepoint(enemy.pos.x,enemy.pos.y):
-                enemy.update(tick)
-                enemy.update_collisions(self.enemy_list)
+            # if self.world_rect.colliderect(enemy.rect):
+            enemy.update(tick)
+            enemy.update_collisions(self.enemy_list)
 
-                x, y = (int(enemy.pos.x / self.main_map.each_size),
-                        int(enemy.pos.y / self.main_map.each_size))
+            x, y = (int(enemy.pos.x / self.main_map.each_size),
+                    int(enemy.pos.y / self.main_map.each_size))
 
-                offset = vec2(enemy.pos.x % self.main_map.each_size,
-                            enemy.pos.y % self.main_map.each_size)
+            offset = vec2(enemy.pos.x % self.main_map.each_size,
+                        enemy.pos.y % self.main_map.each_size)
 
-                if self.main_map.map_array[x][y].mask.overlap(enemy.mask, vec_to_int(offset)):
-                    enemy.velocity *= -1
-                if enemy.dead:
-                    to_remove.append(enemy)
+            if self.main_map.map_array[x][y].mask.overlap(enemy.mask, vec_to_int(offset)):
+                enemy.velocity *= -1
+            if enemy.dead:
+                to_remove.append(enemy)
 
         """Update player and then camera"""
         old_pos = self.player.pos.copy()
@@ -137,7 +139,7 @@ class World(object):
             elif dead_ent in self.enemy_list:
                 self.enemy_list.remove(dead_ent)
 
-        self.world_rect = pygame.Rect((-self.main_camera.offset.x-20,-self.main_camera.offset.y-20),((-self.main_camera.offset.x)+1020,-(self.main_camera.offset.y)+620))
+
 
     def phealth_bar(self, screen):
         font = pygame.font.Font(None, 15)
@@ -160,8 +162,8 @@ class World(object):
             bullet.render(surface, self.main_camera)
 
         for enemy in self.enemy_list:
-            if self.world_rect.collidepoint(enemy.pos.x,enemy.pos.y):
-                enemy.render(surface, self.main_camera)
+            # if self.world_rect.colliderect(enemy.rect):
+            enemy.render(surface, self.main_camera)
 
         self.player.render(surface, self.main_camera)
 
