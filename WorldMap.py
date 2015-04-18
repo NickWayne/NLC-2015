@@ -1,5 +1,6 @@
 import pygame
 from vector2 import Vector2 as vec2
+import random
 debug = False
 import random
 
@@ -7,9 +8,8 @@ class WorldMap(object):
 
     def __init__(self, world, size, each_size):
         self.map_filename = world.map_filename
-        self.map_image = world.marching_image
-        self.map_array = [[self.Tile((j, i), each_size, self.map_image) for i in xrange(size[0])] for j in xrange(size[1])]
-
+        self.map_images = world.marching_images
+        self.map_array = [[self.Tile((j, i), each_size, self.map_images) for i in xrange(size[0])] for j in xrange(size[1])]
         self.map_file = open(self.map_filename, "r")
 
         self.map_render = None
@@ -69,7 +69,7 @@ class WorldMap(object):
 
     class Tile:
 
-        def __init__(self, pos, tile_size, total_image):
+        def __init__(self, pos, tile_size, total_images):
             self.tl = 8
             self.tr = 4
             self.br = 2
@@ -77,7 +77,7 @@ class WorldMap(object):
             self.on = False
             self.pos = pos
             self.grand_size = tile_size
-            self.total_image = total_image
+            self.total_images = total_images
             self.mask = None
             self.img = None
 
@@ -97,7 +97,8 @@ class WorldMap(object):
             new_y = total // 4
             new_x = total % 4
 
-            self.img = pygame.transform.scale(self.total_image.subsurface(new_x*32, new_y*32, 32, 32), (size, size))
+            a = random.randint(0,len(self.total_images)-1)
+            self.img = pygame.transform.scale(self.total_images[a].subsurface(new_x*32, new_y*32, 32, 32), (size, size))
             self.mask = pygame.mask.from_surface(self.img)
             self.rect = self.img.get_rect()
 

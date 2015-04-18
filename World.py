@@ -175,8 +175,9 @@ class World(object):
     def set_up_level(self, level_name):
         #level_name = "map"
         self.map_filename = "maps/"+level_name+".txt"
-        self.marching_image = pygame.image.load("maps/testing.png").convert()
-        self.marching_image.set_colorkey((255, 0, 255))
+        self.marching_images = [pygame.image.load("maps/tilemap1.png").convert(),pygame.image.load("maps/tilemap2.png").convert()]
+        for i in self.marching_images:
+            i.set_colorkey((255, 0, 255))
         self.main_map = WorldMap(self, (32, 32), 256)
         self.main_map.update()
 

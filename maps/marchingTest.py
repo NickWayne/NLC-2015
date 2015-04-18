@@ -12,7 +12,7 @@ def main():
     w = h = 512
     screen = pygame.display.set_mode((w, h))
 
-    marchingImg = pygame.image.load("testing.png").convert()
+    marchingImg = pygame.image.load("tilemap1.png").convert()
 
     grandSize = 32
 
