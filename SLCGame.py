@@ -4,6 +4,7 @@
 
 import pygame
 import time
+pygame.mixer.pre_init(22050,-16, 2, 1024)
 pygame.init()
 
 from vector2 import Vector2 as vec2
@@ -41,7 +42,7 @@ def main():
 
     target_fps = 120.0
 
-    game_states = ["menu", "game", "win", "lose"]
+    game_states = ["menu", "game", "help", "win", "lose"]
     current_state = game_states[0]
 
     sleep_timer = 0
@@ -89,6 +90,7 @@ def main():
 
             option = main_menu.handle_mouse_input(mouse_pos, pygame.mouse.get_pressed())
             if option is not None:
+                main_world.sound_classes[0].play()
                 if option == 1:
                     """start"""
                     current_state = "game"
@@ -98,8 +100,7 @@ def main():
                     pass
 
                 elif option == 3:
-                    """help"""
-                    pass
+                    current_state = "help"
 
                 elif option == 4:
                     """credits"""
@@ -110,6 +111,13 @@ def main():
 
             main_menu.render(screen)
             
+            pygame.display.flip()
+
+        elif current_state == "help":
+            main_menu.help_screen(screen)
+            pressed_keys = pygame.key.get_pressed()
+            if pressed_keys[pygame.K_ESCAPE]:
+                current_state = "menu"
             pygame.display.flip()
 
         elif current_state == "game":
@@ -134,7 +142,6 @@ def main():
 
             """Render"""
             screen.fill((0, 0, 0))
-
             main_world.render(screen)
 
             pygame.display.set_caption("[FPS: {:.4}]".format(clock.get_fps()))

@@ -17,8 +17,8 @@ class Virus(BaseEnemy):
         BaseEnemy.__init__(self, world, pos)
         
         """Base variables"""
-        self.max_range = 150
-        self.attacking_range = 150
+        self.max_range = 350
+        self.attacking_range = 350
         self.scared_range = 0
         self.ranged = False
         self.dead = False
@@ -46,7 +46,7 @@ class Virus(BaseEnemy):
         self.img = self.image
         self.rect = self.img.get_rect()
 
-        self.max_ents = 5
+        self.max_ents = 0
 
         
 class Reproducing(State):
@@ -73,8 +73,6 @@ class Reproducing(State):
             self.enemy.food = 0
             self.enemy.world.enemy_list.append(new_virus)
 
-
-
     def check_conditions(self):
         if self.enemy.get_dist_to(self.player.pos) < self.enemy.attacking_range:
             return "attacking"
@@ -94,10 +92,10 @@ class Attacking(State):
         self.player = player
 
     def entry_actions(self):
-        pass
+        self.enemy.target = self.player
 
     def do_actions(self, tick):
-        self.enemy.velocity += -self.enemy.get_vector_to_target() * self.enemy.acceleration * tick
+        self.enemy.velocity += self.enemy.get_vector_to_target() * self.enemy.acceleration * tick
         if self.enemy.get_dist_to(self.player.pos) < self.enemy.radius:
             """Explode"""
             self.enemy.dead = True

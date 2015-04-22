@@ -14,7 +14,7 @@ class Rootkit(BaseEnemy):
         self.imagefuncs = ImageFuncs(32,32,world.base_image)
         self.lst = self.imagefuncs.get_images(2,0,2)
         self.max_range = 350
-        self.attacking_range = 100
+        self.attacking_range = 150
         self.scared_range = 0
 
         self.dead = False
@@ -46,6 +46,7 @@ class Sneaking(State):
         State.__init__(self, "sneaking")
         self.enemy = enemy
         self.player = player
+        self.enemy.visible = False
         
     def do_actions(self, tick):
         self.enemy.velocity += self.enemy.get_vector_to_target() * self.enemy.acceleration * tick
@@ -53,10 +54,10 @@ class Sneaking(State):
     def entry_actions(self):
         self.enemy.img = self.enemy.lst[0]
         self.enemy.img.set_colorkey((255,0,255))
-        self.target = self.player.pos.copy()
+        self.enemy.target = self.player
 
     def exit_actions(self):
-        pass
+        self.enemy.visible = True
 
     def check_conditions(self):
         if self.enemy.get_dist_to(self.player.pos) < self.enemy.attacking_range:
@@ -74,7 +75,7 @@ class Attacking(State):
     def entry_actions(self):
         self.enemy.img = self.enemy.lst[1]
         self.enemy.img.set_colorkey((255,0,255))
-        self.target = self.player.pos.copy()
+        self.enemy.target = self.player
 
     def do_actions(self, tick):
         self.enemy.velocity += self.enemy.get_vector_to_target() * self.enemy.acceleration * tick
@@ -82,9 +83,12 @@ class Attacking(State):
     def check_conditions(self):
         if self.enemy.get_dist_to(self.player.pos) >= self.enemy.attacking_range:
             return "sneaking"
+        if self.enemy.get_dist_to(self.player.pos) <= 32:
+            self.enemy.dead = True
+            self.player.health -= 20
 
     def exit_actions(self):
-        pass
+       self.enemy.visible = False
 
 
 class Roaming(State):
@@ -98,16 +102,14 @@ class Roaming(State):
     def entry_actions(self):
         self.enemy.img = self.enemy.lst[0]
         self.enemy.img.set_colorkey((255,0,255))
-        while self.enemy.world.main_map.test_collisions_point(self.enemy.target.pos):
-            angle = radians(random.randint(0, 359))
-            self.enemy.target = RoamPoint(self.enemy.pos + vec2( cos(angle),sin(angle)) * random.randint(25, 150))
+        angle = radians(random.randint(0, 359))
+        self.enemy.target = RoamPoint(self.enemy.pos + vec2( cos(angle),sin(angle)) * random.randint(25, 150))
 
     def do_actions(self, tick):
         self.enemy.velocity += self.enemy.get_vector_to_target() * self.enemy.acceleration * tick
         if self.enemy.get_dist_to(self.enemy.target.pos) < 25:
-            while self.enemy.world.main_map.test_collisions_point(self.enemy.target.pos):
-                angle = radians(random.randint(0, 359))
-                self.enemy.target = RoamPoint(self.enemy.pos + vec2(cos(angle), sin(angle)) * random.randint(50, 250))
+            angle = radians(random.randint(0, 359))
+            self.enemy.target = RoamPoint(self.enemy.pos + vec2(cos(angle), sin(angle)) * random.randint(50, 250))
 
     def check_conditions(self):
         if self.enemy.can_see(self.player):

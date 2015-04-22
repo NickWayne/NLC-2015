@@ -12,7 +12,7 @@ def main():
     w = h = 512
     screen = pygame.display.set_mode((w, h))
 
-    marchingImg = pygame.image.load("testing.png").convert()
+    marchingImg = pygame.image.load("tilemap1.png").convert()
 
     grandSize = 32
 
@@ -81,7 +81,7 @@ def main():
     save_map_name = sys.argv[1]
 
     start_pos = (1, 1)
-    goal_pos = (5, 1)
+    goal_pos = (0, 0)
 
     enemy_lst = []
     lst = []

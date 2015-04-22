@@ -11,8 +11,8 @@ from Camera import Camera
 from WorldMap import WorldMap
 from vector2 import Vector2 as vec2
 from math import ceil
-
-debug = False
+import random
+import glob
 
 class World(object):
 
@@ -20,13 +20,24 @@ class World(object):
 
         self.ss = screen_size
 
+        pygame.mixer.init()
+        self.music_files = glob.glob("res/music/*.mp3")#["Gumbel_-_05_-_Killing_Bosses","pl4y1ng", "sawsq_-_06_-_RottenMage_SpaceJacked_OST_06"]
+        self.sound_files = glob.glob("res/sounds/*.ogg")
+        self.sound_classes = [pygame.mixer.Sound(i) for i in self.sound_files]
+        for SOUND in self.sound_classes:
+            SOUND.set_volume(0.5)
+        number = random.randint(0, len(self.music_files)-1)
+        #number = 2
+        pygame.mixer.music.load(self.music_files[number])
+        pygame.mixer.music.play()
+
         self.base_image = pygame.image.load("res/base.png").convert()
         self.image_funcs = ImageFuncs(32, 32, self.base_image)
 
         self.bullet_list = []
         self.enemy_list = []
 
-        self.player_image = self.image_funcs.get_image(2, 0)
+        self.player_image = self.image_funcs.get_image(4, 0)
         
         self.game_won = False
         self.game_over = False
@@ -36,19 +47,23 @@ class World(object):
         self.main_font = pygame.font.Font(None, 25)
         self.debug_text_on = False
 
-        self.levels = ["tutorial1", "tutorial2", "map", "testingSpawn"]
+        self.levels = ["tutorial1", "tutorial2", "map", "testingSpawn", "virustest", "scary", "bossfight"]
         self.level_index = 0
-        level = self.levels[0]
+        level = self.levels[self.level_index]
 
         self.set_up_level(level)
         self.back = pygame.image.load("res/back.png").convert()
-        self.back2 = pygame.image.load("res/back2.png").convert()
+        self.UI = pygame.image.load("res/UI.png").convert()
+        self.UI.set_colorkey((255,0,255))
+        self.world_rect = pygame.Rect((0,0),(1000,600))
 
     def update(self, mouse_pos, movement, tick, to_debug=False):
         """Updates all entities and shots. takes
             arguments for the position of the mouse,
             the player movement vector, and the
             time passed since the last frame."""
+
+        self.world_rect = pygame.Rect((-self.main_camera.offset.x,-self.main_camera.offset.y),(1000,600))
 
         to_remove = []
 
@@ -63,6 +78,7 @@ class World(object):
                         bullet.dead = True
                         enemy.health -= 10
                         enemy.hit_this_frame = True
+                        self.sound_classes[1].play()
                         if enemy.health <= 0:
                             enemy.dead = True
             bullet.update(tick)
@@ -78,7 +94,7 @@ class World(object):
 
             offset = vec2(enemy.pos.x % self.main_map.each_size,
                         enemy.pos.y % self.main_map.each_size)
-            
+
             if self.main_map.map_array[x][y].mask.overlap(enemy.mask, vec_to_int(offset)):
                 enemy.velocity *= -1
             if enemy.dead:
@@ -116,11 +132,13 @@ class World(object):
                 i.get_mask()
                 if self.main_map.map_array[x][y].mask.overlap(i.mask, vec_to_int(offset)):
                     i.dead = True
+                    self.sound_classes[3].play()
 
         movement = self.player.pos - old_pos
         self.main_camera.update(-movement)
 
         if self.goal.check():
+            self.sound_classes[0].play()
             self.level_index+=1
             self.set_up_level(self.levels[self.level_index])
 
@@ -134,30 +152,51 @@ class World(object):
                 self.bullet_list.remove(dead_ent)
 
             elif dead_ent in self.enemy_list:
+                if dead_ent.__class__.__name__ == "Boss" or (len(self.enemy_list) == 1 and self.goal.pos == vec2(0, 0)):
+                    self.goal.pos = dead_ent.pos.copy()
                 self.enemy_list.remove(dead_ent)
+                
+
+    def phealth_bar(self, screen):
+        font = pygame.font.Font(None, 15)
+        pos = (20,560)
+        w,h = (100,20)
+        pygame.draw.rect(screen,(255,0,0),((pos),(w,h)),0)
+        pygame.draw.rect(screen,(0,255,0),((pos),(w*(self.player.health/float(self.player.health_max)),h)),0)
+        string = "%s/%s" %(self.player.health,self.player.health_max)
+        txt = self.main_font.render(str(string), True, (8,59,47))
+        txt_rect = txt.get_rect()
+        txt_rect.midleft = (20,590)
+        screen.blit(txt,txt_rect)
 
     def render(self, surface):
 
+        surface.blit(self.back,(-500,-500))
         self.main_map.render(surface, self.main_camera)
 
         for bullet in self.bullet_list:
             bullet.render(surface, self.main_camera)
 
         for enemy in self.enemy_list:
+            # if self.world_rect.colliderect(enemy.rect):
             enemy.render(surface, self.main_camera)
 
         self.player.render(surface, self.main_camera)
 
         self.goal.render(surface)
 
-        health_string = "Player Health: " + str(self.player.health)
-        surface.blit(self.main_font.render(health_string, True, (0, 204, 0)), (100, 500))
+        surface.blit(self.UI,(0,0))
+        self.phealth_bar(surface)
 
     def set_up_level(self, level_name):
-        #level_name = "map"
+        del self.enemy_list[:]
+        
         self.map_filename = "maps/"+level_name+".txt"
         self.marching_image = pygame.image.load("maps/MapImage.png").convert()
         self.marching_image.set_colorkey((255, 0, 255))
+        self.marching_images = [pygame.image.load("maps/tilemap1.png").convert(),pygame.image.load("maps/tilemap2.png").convert()]
+        for i in self.marching_images:
+            i.set_colorkey((255, 0, 255))
         self.main_map = WorldMap(self, (32, 32), 256)
         self.main_map.update()
 

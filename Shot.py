@@ -10,7 +10,7 @@ class Shot(object):
         self.angle = angle
         self.bool_enemy = bool_enemy
 
-        self.life = 5
+        self.life = 2
         self.dead = False
         
 

@@ -17,15 +17,16 @@ class Player(object):
         
         self.acc_const = 5
         self.bullet_list = self.world.bullet_list
-        self.reload_max = .1
+        self.reload_max = .15
         self.reload = self.reload_max
         self.mxy = vec2(0, 0)
         self.dxy = vec2(0, 0)
         self.rect = self.img.get_rect()
         self.mask = pygame.mask.from_surface(self.img)
-        self.speed = 250
+        self.speed = 300
 
-        self.health = 1000
+        self.health = 100
+        self.health_max = self.health
 
         self.velocity = vec2()
         self.acceleration = 5
@@ -67,6 +68,8 @@ class Player(object):
 
     def shoot(self, pos):
         if self.reload <= 0:
+            self.world.sound_classes[2].play()
+
             angle = self.get_angle(pos)
             vel = vec2(math.cos(angle), math.sin(angle)) * 500
 
