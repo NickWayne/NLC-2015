@@ -52,7 +52,8 @@ class World(object):
         self.main_font = pygame.font.Font(None, 25)
         self.debug_text_on = False
 
-        self.levels = ["tutorial1", "tutorial2", "map", "testingSpawn", "virustest", "scary", "bossfight"]
+        #self.levels = ["tutorial1", "tutorial2", "map", "testingSpawn", "virustest", "scary", "bossfight"]
+        self.levels = ["level1", "level2", "level3", "level4", "level5", "level6", "level7"]
         self.level_index = 0
         level = self.levels[self.level_index]
 
@@ -211,9 +212,8 @@ class World(object):
         self.main_map.update()
 
         self.main_camera.offset = vec2(self.ss[0]/2, self.ss[1]/2)
-    
-        self.player = Player(self, self.player_image, (0, 0))
 
+        self.player = Player(self, self.player_image, (0, 0))
         self.goal = EndPoint(vec2(0,0), self)
 
         self.candy_filename = "maps/"+level_name+"-startgoals.txt"
@@ -250,7 +250,6 @@ class World(object):
             elif e_type == 'v':
                 self.enemy_list.append(Virus(self, vec2(*pos)))
         enemy_file.close()
-
     def instantiate_projectile(self, pos, angle, vel, bool_enemy, bool_player=False):
         self.bullet_list.append(Shot(pos, angle, vel, bool_enemy, bool_player))
 
