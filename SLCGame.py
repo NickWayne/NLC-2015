@@ -94,6 +94,7 @@ def main():
                 if option == 1:
                     """start"""
                     current_state = "game"
+                    pygame.mixer.music.stop()
 
                 elif option == 2:
                     """tutorial"""

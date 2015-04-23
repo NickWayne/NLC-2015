@@ -21,15 +21,20 @@ class World(object):
         self.ss = screen_size
 
         pygame.mixer.init()
-        self.music_files = glob.glob("res/music/*.mp3")#["Gumbel_-_05_-_Killing_Bosses","pl4y1ng", "sawsq_-_06_-_RottenMage_SpaceJacked_OST_06"]
+        self.music_files = glob.glob("res/music/*.mp3")
         self.sound_files = glob.glob("res/sounds/*.ogg")
+
+        self.credit_music = glob.glob("res/music/credits/*.mp3")
+        self.intro_music = glob.glob("res/music/menu/*.mp3")
+
+
         self.sound_classes = [pygame.mixer.Sound(i) for i in self.sound_files]
         for SOUND in self.sound_classes:
             SOUND.set_volume(0.5)
         number = random.randint(0, len(self.music_files)-1)
-        #number = 2
-        pygame.mixer.music.load(self.music_files[number])
-        pygame.mixer.music.play()
+        
+        pygame.mixer.music.load(self.intro_music[0])
+        pygame.mixer.music.play(-1)
 
         self.base_image = pygame.image.load("res/base.png").convert()
         self.image_funcs = ImageFuncs(32, 32, self.base_image)
@@ -155,7 +160,10 @@ class World(object):
                 if dead_ent.__class__.__name__ == "Boss" or (len(self.enemy_list) == 1 and self.goal.pos == vec2(0, 0)):
                     self.goal.pos = dead_ent.pos.copy()
                 self.enemy_list.remove(dead_ent)
-                
+
+        if not pygame.mixer.music.get_busy():
+            pygame.mixer.music.load(self.music_files[random.randint(0, len(self.music_files)-1)])
+            pygame.mixer.music.play()
 
     def phealth_bar(self, screen):
         font = pygame.font.Font(None, 15)
@@ -190,6 +198,8 @@ class World(object):
 
     def set_up_level(self, level_name):
         del self.enemy_list[:]
+        self.game_over = False
+        self.game_won = False
         
         self.map_filename = "maps/"+level_name+".txt"
         self.marching_image = pygame.image.load("maps/MapImage.png").convert()
