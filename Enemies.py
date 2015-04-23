@@ -23,6 +23,7 @@ class BaseEnemy(object):
         self.attacking_range = 150
         self.scared_range = 100
         self.bullet_list = self.world.bullet_list
+        self.invulnerable = False
 
         self.reload_max = 5
         self.reload = self.reload_max
@@ -76,8 +77,10 @@ class BaseEnemy(object):
         """
 
     def update_collisions(self, enemy_list):
+        if self.__class__.__name__ == "Boss":
+            return
         for i, current_enemy in enumerate(enemy_list):
-            if current_enemy is self:
+            if current_enemy is self or current_enemy.__class__.__name__ == "Boss":
                 continue
             current_vec = vec2().from_points(self.pos, current_enemy.pos)
             if current_vec.get_magnitude() < self.radius + current_enemy.radius:
