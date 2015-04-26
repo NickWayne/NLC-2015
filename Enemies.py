@@ -98,7 +98,7 @@ class BaseEnemy(object):
 
     def change_target(self):
         angle = random.uniform(0, 2*pi)
-        self.target = RoamPoint(self.clamp_vec(self.pos+vec2(cos(angle), sin(angle))*random.randint(50, 250)))
+        self.target = RoamPoint(self.pos + vec2(cos(angle), sin(angle)) * random.randint(50, 250))
 
     def health_bar(self, screen):
         if self.visible == True:
@@ -147,13 +147,6 @@ class BaseEnemy(object):
 
     def vec_to_int(self, vec):
         return int(vec.x), int(vec.y)
-
-    def clamp_vec(self, vec):
-        new_vec = vec2()
-        new_vec.x = max(0, min(vec.x, screen_size.x))
-        new_vec.y = max(0, min(vec.y, screen_size.y))
-
-        return new_vec
 
     def render(self, surface, camera):
         """renders the enemy to the given surface"""

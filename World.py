@@ -13,6 +13,7 @@ from vector2 import Vector2 as vec2
 from math import ceil
 import random
 import glob
+from Enemies import RoamPoint
 
 class World(object):
 
@@ -72,7 +73,7 @@ class World(object):
             the player movement vector, and the
             time passed since the last frame."""
 
-        self.world_rect = pygame.Rect((-self.main_camera.offset.x,-self.main_camera.offset.y),(1000,600))
+        self.world_rect = pygame.Rect((-self.main_camera.offset.x, -self.main_camera.offset.y), (1000, 600))
 
         to_remove = []
 
@@ -105,7 +106,9 @@ class World(object):
                         enemy.pos.y % self.main_map.each_size)
 
             if self.main_map.map_array[x][y].mask.overlap(enemy.mask, vec_to_int(offset)):
-                enemy.velocity *= -1
+                enemy.velocity = enemy.velocity.normalize() * -5
+                enemy.target = RoamPoint(enemy.get_vector_to_target().normalize() * -150)
+
             if enemy.dead:
                 to_remove.append(enemy)
 
