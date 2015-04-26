@@ -32,6 +32,8 @@ class Player(object):
         self.velocity = vec2()
         self.acceleration = 5
 
+        self.points = 0
+
     def vec_to_int(self, vec):
         return int(vec.x), int(vec.y)
 

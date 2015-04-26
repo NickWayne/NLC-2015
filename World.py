@@ -88,7 +88,7 @@ class World(object):
                         bullet.dead = True
                         enemy.health -= 10
                         enemy.hit_this_frame = True
-                        self.sound_classes[1].play()
+                        self.sound_classes[3].play()
                         if enemy.health <= 0:
                             enemy.dead = True
             bullet.update(tick)
@@ -144,7 +144,7 @@ class World(object):
                 i.get_mask()
                 if self.main_map.map_array[x][y].mask.overlap(i.mask, vec_to_int(offset)):
                     i.dead = True
-                    self.sound_classes[3].play()
+                    # self.sound_classes[1].play()
 
         movement = self.player.pos - old_pos
         self.main_camera.update(-movement)

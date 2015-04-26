@@ -26,7 +26,7 @@ Take note in design to include computer networking structure and devices.
 """
 
 def main():
-    screen_size = w, h = (1920,1080)
+    screen_size = w, h = (1000,600)
     """screen_size"""
 
     screen = pygame.display.set_mode(screen_size)
@@ -102,25 +102,17 @@ def main():
                     current_state = "game"
                     pygame.mixer.music.stop()
                     main_world.game_over = False
-                    main_world.set_up_level(main_world.levels[main_world.level_index])
-
-                elif option == 2:
-                    """tutorial"""
-                    current_state = "game"
                     main_world.level_index = 0
                     main_world.set_up_level(main_world.levels[main_world.level_index])
 
-                elif option == 3:
+                elif option == 2:
                     current_state = "help"
 
-                elif option == 4:
+                elif option == 3:
                     """links"""
                     current_state = "links"
-                    # webbrowser.open_new(r"http://en.wikipedia.org/wiki/Malware")
-                    # done = True
 
-
-                elif option == 5:
+                elif option == 4:
                     done = True
 
             main_menu.render(screen)
