@@ -97,8 +97,11 @@ def main():
                     pygame.mixer.music.stop()
 
                 elif option == 2:
+                    main_world.tut = True
                     """tutorial"""
-                    pass
+                    current_state = "game"
+                    main_world.tutorial()
+                    pygame.mixer.music.stop()
 
                 elif option == 3:
                     current_state = "help"
@@ -154,6 +157,9 @@ def main():
             if main_world.game_won:
                 current_state = "win"
                 sleep_timer = 3
+
+            if main_world.tut == False:
+                current_state = "menu"
 
             pygame.display.flip()
 

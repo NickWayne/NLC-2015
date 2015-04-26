@@ -51,8 +51,10 @@ class World(object):
 
         self.main_font = pygame.font.Font(None, 25)
         self.debug_text_on = False
+        self.tut = False
 
-        self.levels = ["tutorial1", "tutorial2", "map", "testingSpawn", "virustest", "scary", "bossfight"]
+        self.levels = ["map", "testingSpawn", "virustest", "scary", "bossfight"]
+        self.tut_levels = ["tutorial1", "tutorial2"]
         self.level_index = 0
         level = self.levels[self.level_index]
 
@@ -145,7 +147,14 @@ class World(object):
         if self.goal.check():
             self.sound_classes[0].play()
             self.level_index+=1
-            self.set_up_level(self.levels[self.level_index])
+            if self.tut == True:
+                if self.level_index == len(self.tut_levels):
+                    self.tut = False
+                    self.level_index = 0
+                else:
+                    self.set_up_level(self.tut_levels[self.level_index])
+            else:
+                self.set_up_level(self.levels[self.level_index])
 
         if self.player.health <= 0:
             self.game_over = True
@@ -164,6 +173,11 @@ class World(object):
         if not pygame.mixer.music.get_busy():
             pygame.mixer.music.load(self.music_files[random.randint(0, len(self.music_files)-1)])
             pygame.mixer.music.play()
+
+    def tutorial(self):
+        level = self.tut_levels[0]
+        self.set_up_level(level)
+
 
     def phealth_bar(self, screen):
         font = pygame.font.Font(None, 15)
@@ -204,9 +218,11 @@ class World(object):
         self.map_filename = "maps/"+level_name+".txt"
         self.marching_image = pygame.image.load("maps/MapImage.png").convert()
         self.marching_image.set_colorkey((255, 0, 255))
-        self.marching_images = [pygame.image.load("maps/tilemap1.png").convert(),pygame.image.load("maps/tilemap2.png").convert()]
+        self.marching_images = ["maps/tilemap1.png","maps/tilemap2.png", "maps/tilemap3.png"]
         for i in self.marching_images:
-            i.set_colorkey((255, 0, 255))
+            a = pygame.image.load(i).convert()
+            a.set_colorkey((255, 0, 255))
+            self.marching_images[self.marching_images.index(i)] = a
         self.main_map = WorldMap(self, (32, 32), 256)
         self.main_map.update()
 
