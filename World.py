@@ -68,7 +68,7 @@ class World(object):
         self.world_rect = pygame.Rect((0,0),(1000,600))
 
     def update(self, mouse_pos, movement, tick, to_debug=False):
-        """Updates all entities and shots. takes
+        """Updates all entities and shots. takes1
             arguments for the position of the mouse,
             the player movement vector, and the
             time passed since the last frame."""
@@ -174,15 +174,20 @@ class World(object):
 
     def phealth_bar(self, screen):
         font = pygame.font.Font(None, 15)
-        pos = (20,560)
+        pos = (20,550)
         w,h = (100,20)
         pygame.draw.rect(screen,(255,0,0),((pos),(w,h)),0)
         pygame.draw.rect(screen,(0,255,0),((pos),(w*(self.player.health/float(self.player.health_max)),h)),0)
         string = "%s/%s" %(self.player.health,self.player.health_max)
         txt = self.main_font.render(str(string), True, (8,59,47))
         txt_rect = txt.get_rect()
-        txt_rect.midleft = (20,590)
+        txt_rect.midleft = (20,580)
         screen.blit(txt,txt_rect)
+
+        pos = (100,550)
+        string = "%s" %(self.player.points)
+
+
 
     def render(self, surface):
 

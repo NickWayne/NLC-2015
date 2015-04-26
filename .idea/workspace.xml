@@ -2,12 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="45bf9be6-c9d8-43c0-9b39-6bbb19c4dbd7" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/UI.png" afterPath="$PROJECT_DIR$/res/UI.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Menu.py" afterPath="$PROJECT_DIR$/Menu.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Player.py" afterPath="$PROJECT_DIR$/Player.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/SLCGame.py" afterPath="$PROJECT_DIR$/SLCGame.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/World.py" afterPath="$PROJECT_DIR$/World.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="NLC-2015.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -86,8 +81,8 @@
       <file leaf-file-name="World.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/World.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.60828626" vertical-offset="510" max-vertical-offset="4658">
-              <caret line="64" column="60" selection-start-line="64" selection-start-column="60" selection-end-line="64" selection-end-column="60" />
+            <state vertical-scroll-proportion="0.73634654" vertical-offset="2635" max-vertical-offset="4743">
+              <caret line="193" column="38" selection-start-line="193" selection-start-column="38" selection-end-line="193" selection-end-column="38" />
               <folding />
             </state>
           </provider>
@@ -109,10 +104,10 @@
         <option value="$PROJECT_DIR$/Rootkit.py" />
         <option value="$PROJECT_DIR$/Virus.py" />
         <option value="$PROJECT_DIR$/Boss.py" />
-        <option value="$PROJECT_DIR$/World.py" />
         <option value="$PROJECT_DIR$/Menu.py" />
         <option value="$PROJECT_DIR$/SLCGame.py" />
         <option value="$PROJECT_DIR$/Player.py" />
+        <option value="$PROJECT_DIR$/World.py" />
       </list>
     </option>
   </component>
@@ -876,8 +871,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/World.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.60828626" vertical-offset="510" max-vertical-offset="4658">
-          <caret line="64" column="60" selection-start-line="64" selection-start-column="60" selection-end-line="64" selection-end-column="60" />
+        <state vertical-scroll-proportion="0.73634654" vertical-offset="2635" max-vertical-offset="4743">
+          <caret line="193" column="38" selection-start-line="193" selection-start-column="38" selection-end-line="193" selection-end-column="38" />
           <folding />
         </state>
       </provider>
