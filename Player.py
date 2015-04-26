@@ -76,7 +76,10 @@ class Player(object):
             angle = self.get_angle(pos)
             vel = vec2(math.cos(angle), math.sin(angle)) * 500
 
-            self.world.instantiate_projectile(self.pos.copy(), angle, vel, False, True)
+            x = self.pos.copy()[0]+(math.cos(angle)*20)
+            y = self.pos.copy()[1]+(math.sin(angle)*20)
+
+            self.world.instantiate_projectile((x,y), angle, vel, False, True)
             self.reload = self.reload_max
 
     def move(self):

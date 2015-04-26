@@ -15,7 +15,7 @@ class Menu(object):
         self.footer_font = pygame.font.Font("pixelFont.ttf", 16)
         self.in_between_font = pygame.font.Font("pixelFont.ttf", 20)
 
-        self.texts = ["START", "LEVEL SELECT", "HELP", "LINKS", "QUIT"]
+        self.texts = ["START", "LEVEL SELECT", "HELP", "LINKS", "CREDITS", "QUIT"]
 
         self.title = "NLC Game and Simulation Submission - 2015"
 
@@ -27,6 +27,9 @@ class Menu(object):
         self.title_rect.center = (500, self.title_rect.h)
         self.clicked = False
         self.clicked_time = 0
+
+        self.img = pygame.image.load("res/base.png").convert()
+        self.ImageFuncs = ImageFuncs.ImageFuncs(32,32,self.img)
 
         self.text_rects.append(self.title_rect)
 
@@ -63,8 +66,6 @@ class Menu(object):
 
     def help_screen(self,screen,mouse_pos):
         screen.fill((0,0,0))
-        self.img = pygame.image.load("res/base.png").convert()
-        self.ImageFuncs = ImageFuncs.ImageFuncs(32,32,self.img)
         self.img_lst = []
         self.img_lst.append(self.ImageFuncs.get_image(0,1))
         self.img_lst.append(self.ImageFuncs.get_image(1,2))
@@ -103,8 +104,6 @@ class Menu(object):
 
     def links(self,screen,mouse_pos,tick):
         screen.fill((0,0,0))
-        self.img = pygame.image.load("res/base.png").convert()
-        self.ImageFuncs = ImageFuncs.ImageFuncs(32,32,self.img)
         self.img_lst = []
         self.img_lst.append(self.ImageFuncs.get_image(0,1))
         self.img_lst.append(self.ImageFuncs.get_image(1,2))
@@ -129,11 +128,11 @@ class Menu(object):
         for i in self.img_lst:
             i.set_colorkey((255,0,255))
             index = self.img_lst.index(i)
-            screen.blit(i,(100, 100 + i.get_height() * index * 3))
+            screen.blit(i,(350, 100 + i.get_height() * index * 3))
             txt = self.menu_font.render(linelst[index], True, (255, 255, 255))
             txt_rect = txt.get_rect()
             text_rects.append(txt_rect)
-            txt_rect.midleft = (160,117 + i.get_height() * index * 3)
+            txt_rect.midleft = (460,117 + i.get_height() * index * 3)
             screen.blit(txt,txt_rect)
 
         txt = self.menu_font.render("Press ESCAPE to go back", True, (255, 0, 255))
@@ -184,6 +183,33 @@ class Menu(object):
         surface.blit(menu_cursor_image, (mouse_pos[0]-16, mouse_pos[1]-16))
 
         return to_return
+
+    def credits(self,surface,mouse_pos,tick):
+        surface.fill((0,0,0))
+        menu_cursor_image = self.ImageFuncs.get_image(3, 1)
+        menu_cursor_image.set_colorkey((255, 0, 255))
+        open_file = open("credits.txt", 'r')
+        linelst =[]
+        contents = open_file.readlines()
+        for i in range(len(contents)):
+             linelst.append(contents[i].strip('\n'))
+        for i in linelst:
+            if i == '':
+                linelst.pop(linelst.index(i))
+        open_file.close()
+        for i in linelst:
+            index = linelst.index(i)
+            txt = self.menu_font.render(linelst[index], True, (255, 255, 255))
+            txt_rect = txt.get_rect()
+            txt_rect.midleft = (100,30 * index + 30)
+            surface.blit(txt,txt_rect)
+
+        txt = self.menu_font.render("Press ESCAPE to go back", True, (255, 0, 255))
+        txt_rect = txt.get_rect()
+        txt_rect.center = (500, 500)
+        surface.blit(txt,txt_rect)
+
+        surface.blit(menu_cursor_image, (mouse_pos[0]-16, mouse_pos[1]-16))
 
     def render(self, surface):
         """Renders the text stored in the class to the screen"""

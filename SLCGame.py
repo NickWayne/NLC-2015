@@ -116,6 +116,10 @@ def main():
                     current_state = "links"
 
                 elif option == 5:
+                    """links"""
+                    current_state = "credits"
+
+                elif option == 6:
                     done = True
 
             main_menu.render(screen)
@@ -139,6 +143,13 @@ def main():
 
         elif current_state == "level select":
             main_menu.level_select(screen, mouse_pos, time_passed_seconds, main_world)
+            pressed_keys = pygame.key.get_pressed()
+            if pressed_keys[pygame.K_ESCAPE]:
+                current_state = "menu"
+            pygame.display.flip()
+
+        elif current_state == "credits":
+            main_menu.credits(screen,mouse_pos,time_passed_seconds)
             pressed_keys = pygame.key.get_pressed()
             if pressed_keys[pygame.K_ESCAPE]:
                 current_state = "menu"
