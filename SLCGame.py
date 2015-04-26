@@ -12,6 +12,7 @@ from vector2 import Vector2 as vec2
 from World import World
 import random
 from Menu import Menu
+import webbrowser
 """
 PROMPT:
 
@@ -25,7 +26,7 @@ Take note in design to include computer networking structure and devices.
 """
 
 def main():
-    screen_size = w, h = (1000, 600)
+    screen_size = w, h = (1000,600)
     """screen_size"""
 
     screen = pygame.display.set_mode(screen_size)
@@ -101,22 +102,17 @@ def main():
                     current_state = "game"
                     pygame.mixer.music.stop()
                     main_world.game_over = False
-                    main_world.set_up_level(main_world.levels[main_world.level_index])
-
-                elif option == 2:
-                    """tutorial"""
-                    current_state = "game"
                     main_world.level_index = 0
                     main_world.set_up_level(main_world.levels[main_world.level_index])
 
-                elif option == 3:
+                elif option == 2:
                     current_state = "help"
 
-                elif option == 4:
-                    """credits"""
-                    pass
+                elif option == 3:
+                    """links"""
+                    current_state = "links"
 
-                elif option == 5:
+                elif option == 4:
                     done = True
 
             main_menu.render(screen)
@@ -125,7 +121,14 @@ def main():
             pygame.display.flip()
 
         elif current_state == "help":
-            main_menu.help_screen(screen)
+            main_menu.help_screen(screen,mouse_pos)
+            pressed_keys = pygame.key.get_pressed()
+            if pressed_keys[pygame.K_ESCAPE]:
+                current_state = "menu"
+            pygame.display.flip()
+
+        elif current_state == "links":
+            main_menu.links(screen,mouse_pos,time_passed_seconds)
             pressed_keys = pygame.key.get_pressed()
             if pressed_keys[pygame.K_ESCAPE]:
                 current_state = "menu"

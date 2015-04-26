@@ -22,7 +22,7 @@ class Virus(BaseEnemy):
         self.scared_range = 0
         self.ranged = False
         self.dead = False
-        self.damage_dealt_on_death = 10
+        self.damage_dealt_on_death = 5
 
         self.reload_max = 0
         self.food = 0
@@ -45,6 +45,8 @@ class Virus(BaseEnemy):
         self.image.set_colorkey((255, 0, 255))
         self.img = self.image
         self.rect = self.img.get_rect()
+        self.nodam = False
+        self.damcount = 0
 
         self.max_ents = 0
 
@@ -95,11 +97,19 @@ class Attacking(State):
         self.enemy.target = self.player
 
     def do_actions(self, tick):
+        if self.enemy.nodam == True:
+            self.enemy.damcount += tick
+            if self.enemy.damcount >= 2:
+                self.enemy.nodam = False
         self.enemy.velocity += self.enemy.get_vector_to_target() * self.enemy.acceleration * tick
         if self.enemy.get_dist_to(self.player.pos) < self.enemy.radius:
             """Explode"""
-            self.enemy.dead = True
-            self.player.health -= self.enemy.damage_dealt_on_death
+            if self.enemy.nodam == False:
+                self.player.health -= self.enemy.damage_dealt_on_death
+            self.enemy.nodam = True
+            self.player.velocity += self.enemy.velocity
+            self.enemy.velocity = self.enemy.velocity.normalize()*-5
+
 
     def check_conditions(self):
         if self.enemy.get_dist_to(self.player.pos) > self.enemy.max_range:
