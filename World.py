@@ -43,7 +43,10 @@ class World(object):
         self.enemy_list = []
 
         self.player_image = self.image_funcs.get_image(4, 0)
-        
+
+        self.cursor_image = self.image_funcs.get_image(2, 1)
+        self.cursor_image.set_colorkey((255, 0, 255))
+
         self.game_won = False
         self.game_over = False
 
@@ -53,11 +56,11 @@ class World(object):
         self.debug_text_on = False
 
         #self.levels = ["tutorial1", "tutorial2", "map", "testingSpawn", "virustest", "scary", "bossfight"]
-        self.levels = ["level1", "level2", "level3", "level4", "level5", "level6", "level7"]
-        self.level_index = 0
+        self.levels = ["level1", "level2", "level3", "level4", "level5", "level6", "level7", "level8", "bossfight"]
+        self.level_index = 4
         level = self.levels[self.level_index]
 
-        self.set_up_level(level)
+        #self.set_up_level(level)
         self.back = pygame.image.load("res/back.png").convert()
         self.UI = pygame.image.load("res/UI.png").convert()
         self.UI.set_colorkey((255,0,255))
@@ -196,6 +199,9 @@ class World(object):
 
         surface.blit(self.UI,(0,0))
         self.phealth_bar(surface)
+
+        mouse_pos = pygame.mouse.get_pos()
+        surface.blit(self.cursor_image, (mouse_pos[0]-16, mouse_pos[1]-16))
 
     def set_up_level(self, level_name):
         del self.enemy_list[:]

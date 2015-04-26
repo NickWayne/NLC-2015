@@ -40,7 +40,7 @@ class BaseEnemy(object):
         """AI variables"""
         self.brain = StateMachine()
 
-        self.radius = 14
+        self.radius = 25
             
         self.hit_this_frame = False
         self.visible = True
