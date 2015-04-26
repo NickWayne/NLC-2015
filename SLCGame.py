@@ -106,13 +106,16 @@ def main():
                     main_world.set_up_level(main_world.levels[main_world.level_index])
 
                 elif option == 2:
-                    current_state = "help"
+                    current_state = "level select"
 
                 elif option == 3:
+                    current_state = "help"
+
+                elif option == 4:
                     """links"""
                     current_state = "links"
 
-                elif option == 4:
+                elif option == 5:
                     done = True
 
             main_menu.render(screen)
@@ -129,6 +132,13 @@ def main():
 
         elif current_state == "links":
             main_menu.links(screen,mouse_pos,time_passed_seconds)
+            pressed_keys = pygame.key.get_pressed()
+            if pressed_keys[pygame.K_ESCAPE]:
+                current_state = "menu"
+            pygame.display.flip()
+
+        elif current_state == "level select":
+            main_menu.level_select(screen, mouse_pos, time_passed_seconds, main_world)
             pressed_keys = pygame.key.get_pressed()
             if pressed_keys[pygame.K_ESCAPE]:
                 current_state = "menu"

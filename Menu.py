@@ -12,9 +12,10 @@ class Menu(object):
         
         self.menu_font = pygame.font.Font("pixelFont.ttf", 25)
         self.header_font = pygame.font.Font("pixelFont.ttf", 32)
-        self.footer_font = pygame.font.Font("pixelFont.ttf", 15)
+        self.footer_font = pygame.font.Font("pixelFont.ttf", 16)
+        self.in_between_font = pygame.font.Font("pixelFont.ttf", 20)
 
-        self.texts = ["START", "HELP", "LINKS", "QUIT"]
+        self.texts = ["START", "LEVEL SELECT", "HELP", "LINKS", "QUIT"]
 
         self.title = "NLC Game and Simulation Submission - 2015"
 
@@ -100,8 +101,6 @@ class Menu(object):
         screen.blit(menu_cursor_image, (mouse_pos[0]-16, mouse_pos[1]-16))
 
 
-
-
     def links(self,screen,mouse_pos,tick):
         screen.fill((0,0,0))
         self.img = pygame.image.load("res/base.png").convert()
@@ -158,6 +157,29 @@ class Menu(object):
                 if option == 3:
                     self.clicked = True
                     webbrowser.open_new(r"http://en.wikipedia.org/wiki/Web_Bot")
+
+    def level_select(self, surface, mouse_pos, tick, main_world):
+        surface.fill((0, 0, 0))
+        self.img = pygame.image.load("res/base.png").convert()
+        self.ImageFuncs = ImageFuncs.ImageFuncs(32,32,self.img)
+        menu_cursor_image = self.ImageFuncs.get_image(3, 1)
+        menu_cursor_image.set_colorkey((255, 0, 255))
+ 
+        x = y = 0
+        for i in main_world.levels:
+            level_img = pygame.Surface((96, 96))
+            level_img.fill((200, 200, 200))
+
+            level_rect = level_img.get_rect()
+            level_img.blit(self.in_between_font.render(i, True, (255, 255, 255)), (2, 2))
+            level_rect.center = (128 + 160 * x, 128 + 160 * y)
+            surface.blit(level_img, level_rect)
+
+            x += 1
+            if x == 5:
+                x = 0
+                y += 1
+        surface.blit(menu_cursor_image, (mouse_pos[0]-16, mouse_pos[1]-16))
 
 
 
