@@ -58,7 +58,7 @@ class World(object):
 
         #self.levels = ["tutorial1", "tutorial2", "map", "testingSpawn", "virustest", "scary", "bossfight"]
         self.levels = ["level1", "level2", "level3", "level4", "level5", "level6", "level7", "level8", "bossfight"]
-        self.level_index = 4
+        self.level_index = -1
         level = self.levels[self.level_index]
 
         #self.set_up_level(level)

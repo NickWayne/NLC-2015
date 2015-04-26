@@ -12,6 +12,7 @@ from vector2 import Vector2 as vec2
 from World import World
 import random
 from Menu import Menu
+import webbrowser
 """
 PROMPT:
 
@@ -25,7 +26,7 @@ Take note in design to include computer networking structure and devices.
 """
 
 def main():
-    screen_size = w, h = (1000, 600)
+    screen_size = w, h = (1920,1080)
     """screen_size"""
 
     screen = pygame.display.set_mode(screen_size)
@@ -113,8 +114,11 @@ def main():
                     current_state = "help"
 
                 elif option == 4:
-                    """credits"""
-                    pass
+                    """links"""
+                    current_state = "links"
+                    # webbrowser.open_new(r"http://en.wikipedia.org/wiki/Malware")
+                    # done = True
+
 
                 elif option == 5:
                     done = True
@@ -125,7 +129,14 @@ def main():
             pygame.display.flip()
 
         elif current_state == "help":
-            main_menu.help_screen(screen)
+            main_menu.help_screen(screen,mouse_pos)
+            pressed_keys = pygame.key.get_pressed()
+            if pressed_keys[pygame.K_ESCAPE]:
+                current_state = "menu"
+            pygame.display.flip()
+
+        elif current_state == "links":
+            main_menu.links(screen,mouse_pos,time_passed_seconds)
             pressed_keys = pygame.key.get_pressed()
             if pressed_keys[pygame.K_ESCAPE]:
                 current_state = "menu"

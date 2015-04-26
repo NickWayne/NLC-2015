@@ -27,6 +27,7 @@ class Player(object):
 
         self.health = 100
         self.health_max = self.health
+        self.invulnerable = False
 
         self.velocity = vec2()
         self.acceleration = 5

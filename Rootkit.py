@@ -85,7 +85,7 @@ class Attacking(State):
             return "sneaking"
         if self.enemy.get_dist_to(self.player.pos) <= 32:
             self.enemy.dead = True
-            self.player.health -= 20
+            self.player.health -= 10
 
     def exit_actions(self):
        self.enemy.visible = False
