@@ -91,6 +91,8 @@ class World(object):
                         self.sound_classes[3].play()
                         if enemy.health <= 0:
                             enemy.dead = True
+                            # if
+                            self.player.points += 5
             bullet.update(tick)
             if bullet.dead:
                 to_remove.append(bullet)
@@ -153,6 +155,7 @@ class World(object):
             self.sound_classes[0].play()
             self.level_index+=1
             self.set_up_level(self.levels[self.level_index])
+            self.player.points += 100
 
         if self.player.health <= 0:
             self.game_over = True
@@ -184,8 +187,13 @@ class World(object):
         txt_rect.midleft = (20,580)
         screen.blit(txt,txt_rect)
 
-        pos = (100,550)
-        string = "%s" %(self.player.points)
+        pos = (130,560)
+        string = "Points : %s" %(self.player.points)
+        txt = self.main_font.render(str(string), True, (8,59,47))
+        txt_rect = txt.get_rect()
+        txt_rect.midleft = pos
+        screen.blit(txt,txt_rect)
+
 
 
 
@@ -219,9 +227,11 @@ class World(object):
         self.map_filename = "maps/"+level_name+".txt"
         self.marching_image = pygame.image.load("maps/MapImage.png").convert()
         self.marching_image.set_colorkey((255, 0, 255))
-        self.marching_images = [pygame.image.load("maps/tilemap1.png").convert(),pygame.image.load("maps/tilemap2.png").convert()]
+        self.marching_images = ["maps/tilemap1.png","maps/tilemap2.png", "maps/tilemap3.png"]
         for i in self.marching_images:
-            i.set_colorkey((255, 0, 255))
+            a = pygame.image.load(i).convert()
+            a.set_colorkey((255, 0, 255))
+            self.marching_images[self.marching_images.index(i)] = a
         self.main_map = WorldMap(self, (32, 32), 256)
         self.main_map.update()
 
