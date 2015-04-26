@@ -220,6 +220,7 @@ class World(object):
         surface.blit(self.cursor_image, (mouse_pos[0]-16, mouse_pos[1]-16))
 
     def set_up_level(self, level_name):
+        pts = 0
         del self.enemy_list[:]
         self.game_over = False
         self.game_won = False
@@ -236,8 +237,12 @@ class World(object):
         self.main_map.update()
 
         self.main_camera.offset = vec2(self.ss[0]/2, self.ss[1]/2)
-
+        try :
+            pts = self.player.points
+        except Exception:
+            pass
         self.player = Player(self, self.player_image, (0, 0))
+        self.player.points = pts
         self.goal = EndPoint(vec2(0,0), self)
 
         self.candy_filename = "maps/"+level_name+"-startgoals.txt"

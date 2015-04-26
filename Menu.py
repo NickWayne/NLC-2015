@@ -130,11 +130,11 @@ class Menu(object):
         for i in self.img_lst:
             i.set_colorkey((255,0,255))
             index = self.img_lst.index(i)
-            screen.blit(i,(100, 100 + i.get_height() * index * 3))
+            screen.blit(i,(350, 100 + i.get_height() * index * 3))
             txt = self.menu_font.render(linelst[index], True, (255, 255, 255))
             txt_rect = txt.get_rect()
             text_rects.append(txt_rect)
-            txt_rect.midleft = (160,117 + i.get_height() * index * 3)
+            txt_rect.midleft = (460,117 + i.get_height() * index * 3)
             screen.blit(txt,txt_rect)
 
         txt = self.menu_font.render("Press ESCAPE to go back", True, (255, 0, 255))
@@ -158,6 +158,16 @@ class Menu(object):
                 if option == 3:
                     self.clicked = True
                     webbrowser.open_new(r"http://en.wikipedia.org/wiki/Web_Bot")
+
+
+    def credits(self,surface):
+        # contents = open_file.readlines()
+        # for i in range(len(contents)):
+        #      linelst.append(contents[i].strip('\n'))
+        # for i in linelst:
+        #     if i == '':
+        #         linelst.pop(linelst.index(i))
+        # open_file.close()
 
 
 
