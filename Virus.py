@@ -22,7 +22,7 @@ class Virus(BaseEnemy):
         self.scared_range = 0
         self.ranged = False
         self.dead = False
-        self.damage_dealt_on_death = 5
+        self.damage_dealt_on_death = 10
 
         self.reload_max = 0
         self.food = 0

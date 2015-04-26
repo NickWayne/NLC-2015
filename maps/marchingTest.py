@@ -2,9 +2,6 @@ import pygame
 from pygame.locals import *
 pygame.init()
 
-import VoronoiMapGen as vmg
-from midpointDisplacement import *
-
 import sys
 
 

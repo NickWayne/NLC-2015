@@ -13,6 +13,7 @@ from vector2 import Vector2 as vec2
 from math import ceil
 import random
 import glob
+from Enemies import RoamPoint
 
 class World(object):
 
@@ -43,7 +44,10 @@ class World(object):
         self.enemy_list = []
 
         self.player_image = self.image_funcs.get_image(4, 0)
-        
+
+        self.cursor_image = self.image_funcs.get_image(2, 1)
+        self.cursor_image.set_colorkey((255, 0, 255))
+
         self.game_won = False
         self.game_over = False
 
@@ -52,11 +56,12 @@ class World(object):
         self.main_font = pygame.font.Font(None, 25)
         self.debug_text_on = False
 
-        self.levels = ["tutorial1", "tutorial2", "map", "testingSpawn", "virustest", "scary", "bossfight"]
-        self.level_index = 0
+        #self.levels = ["tutorial1", "tutorial2", "map", "testingSpawn", "virustest", "scary", "bossfight"]
+        self.levels = ["level1", "level2", "level3", "level4", "level5", "level6", "level7", "level8", "bossfight"]
+        self.level_index = 4
         level = self.levels[self.level_index]
 
-        self.set_up_level(level)
+        #self.set_up_level(level)
         self.back = pygame.image.load("res/back.png").convert()
         self.UI = pygame.image.load("res/UI.png").convert()
         self.UI.set_colorkey((255,0,255))
@@ -68,7 +73,7 @@ class World(object):
             the player movement vector, and the
             time passed since the last frame."""
 
-        self.world_rect = pygame.Rect((-self.main_camera.offset.x,-self.main_camera.offset.y),(1000,600))
+        self.world_rect = pygame.Rect((-self.main_camera.offset.x, -self.main_camera.offset.y), (1000, 600))
 
         to_remove = []
 
@@ -101,7 +106,9 @@ class World(object):
                         enemy.pos.y % self.main_map.each_size)
 
             if self.main_map.map_array[x][y].mask.overlap(enemy.mask, vec_to_int(offset)):
-                enemy.velocity *= -1
+                enemy.velocity = enemy.velocity.normalize() * -5
+                enemy.target = RoamPoint(enemy.get_vector_to_target().normalize() * -150)
+
             if enemy.dead:
                 to_remove.append(enemy)
 
@@ -196,6 +203,9 @@ class World(object):
         surface.blit(self.UI,(0,0))
         self.phealth_bar(surface)
 
+        mouse_pos = pygame.mouse.get_pos()
+        surface.blit(self.cursor_image, (mouse_pos[0]-16, mouse_pos[1]-16))
+
     def set_up_level(self, level_name):
         del self.enemy_list[:]
         self.game_over = False
@@ -211,9 +221,8 @@ class World(object):
         self.main_map.update()
 
         self.main_camera.offset = vec2(self.ss[0]/2, self.ss[1]/2)
-    
-        self.player = Player(self, self.player_image, (0, 0))
 
+        self.player = Player(self, self.player_image, (0, 0))
         self.goal = EndPoint(vec2(0,0), self)
 
         self.candy_filename = "maps/"+level_name+"-startgoals.txt"
@@ -250,7 +259,6 @@ class World(object):
             elif e_type == 'v':
                 self.enemy_list.append(Virus(self, vec2(*pos)))
         enemy_file.close()
-
     def instantiate_projectile(self, pos, angle, vel, bool_enemy, bool_player=False):
         self.bullet_list.append(Shot(pos, angle, vel, bool_enemy, bool_player))
 

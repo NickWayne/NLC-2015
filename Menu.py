@@ -9,9 +9,9 @@ class Menu(object):
     def __init__(self):
         """Creates the Menu, pretty self-explainitory"""
         
-        self.menu_font = pygame.font.Font(None, 25)
-        self.header_font = pygame.font.Font(None, 50)
-        self.footer_font = pygame.font.Font(None, 15)
+        self.menu_font = pygame.font.Font("pixelFont.ttf", 25)
+        self.header_font = pygame.font.Font("pixelFont.ttf", 32)
+        self.footer_font = pygame.font.Font("pixelFont.ttf", 15)
 
         self.texts = ["START", "TUTORIAL", "HELP", "CREDITS", "QUIT"]
 

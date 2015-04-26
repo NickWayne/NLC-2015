@@ -34,6 +34,11 @@ def main():
 
     main_world = World(screen_size)
     """set up the game handler"""
+    
+    pygame.mouse.set_visible(False)
+    
+    menu_cursor_image = main_world.image_funcs.get_image(3, 1)
+    menu_cursor_image.set_colorkey((255, 0, 255))
 
     main_menu = Menu()
 
@@ -95,10 +100,14 @@ def main():
                     """start"""
                     current_state = "game"
                     pygame.mixer.music.stop()
+                    main_world.game_over = False
+                    main_world.set_up_level(main_world.levels[main_world.level_index])
 
                 elif option == 2:
                     """tutorial"""
-                    pass
+                    current_state = "game"
+                    main_world.level_index = 0
+                    main_world.set_up_level(main_world.levels[main_world.level_index])
 
                 elif option == 3:
                     current_state = "help"
@@ -111,7 +120,8 @@ def main():
                     done = True
 
             main_menu.render(screen)
-            
+            screen.blit(menu_cursor_image, (mouse_pos[0]-16, mouse_pos[1]-16))
+
             pygame.display.flip()
 
         elif current_state == "help":
