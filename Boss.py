@@ -24,10 +24,10 @@ class Boss(BaseEnemy):
         self.scared_range = 0
         self.ranged = True
         self.dead = False
-        self.health = 1500
+        self.health = 1000
         self.health_max = self.health
         self.base_health = self.health
-        self.reload_max = 3
+        self.reload_max = 4
         self.reload = self.reload_max
         self.animate = False
 
@@ -106,9 +106,9 @@ class Attacking(State):
             """fire"""
             dx = self.enemy.pos.x - self.player.pos.x
             dy = self.enemy.pos.y - self.player.pos.y
-            for i in xrange(50):
+            for i in xrange(25):
                     angle = random.randint(0,360)
-                    vel = vec2(cos(angle), sin(angle))*-350
+                    vel = vec2(cos(angle), sin(angle))*-300
                     self.enemy.bullet_list.append(Shot.Shot(self.enemy.pos.copy(), angle, vel))
             self.enemy.reload = self.enemy.reload_max
         if self.enemy.animate == False:
@@ -118,7 +118,7 @@ class Attacking(State):
             self.enemy.img = self.enemy.lst[self.enemy.ani.get_full_frame(tick)]
             self.enemy.img.set_colorkey((255,0,255))
             if self.enemy.ani.run == 1:
-                for i in range(3):
+                for i in range(2):
                     angle = radians(random.randint(0,359))
                     dist = random.randint(40, 100)
                     vec = self.enemy.pos.copy() + vec2(cos(angle) * dist, sin(angle) * dist)

@@ -5,6 +5,7 @@ from ImageFuncs import ImageFuncs
 from math import sin, cos, radians, atan2, degrees, pi
 import Shot
 import random
+import math
 
 debug = False
 screen_size = vec2(1000, 600)
@@ -210,6 +211,10 @@ class Attacking(State):
             dy = self.enemy.pos.y - self.player.pos.y
             angle = atan2(dy, dx)
             vel = vec2(cos(angle), sin(angle))*-250
+
+            x = self.enemy.copy()[0]+(math.cos(angle)*20)
+            y = self.enemy.copy()[1]+(math.sin(angle)*20)
+
             self.enemy.bullet_list.append(Shot.Shot(self.enemy.pos.copy(), angle, vel))
             self.enemy.reload = self.enemy.reload_max
 
