@@ -165,6 +165,8 @@ class Menu(object):
         menu_cursor_image = self.ImageFuncs.get_image(3, 1)
         menu_cursor_image.set_colorkey((255, 0, 255))
  
+        to_return = False
+
         x = y = 0
         for i in main_world.levels:
             level_img = pygame.Surface((96, 96))
@@ -181,7 +183,7 @@ class Menu(object):
                 y += 1
         surface.blit(menu_cursor_image, (mouse_pos[0]-16, mouse_pos[1]-16))
 
-
+        return to_return
 
     def render(self, surface):
         """Renders the text stored in the class to the screen"""
