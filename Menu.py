@@ -66,11 +66,6 @@ class Menu(object):
 
     def help_screen(self,screen,mouse_pos):
         screen.fill((0,0,0))
-        self.img_lst = []
-        self.img_lst.append(self.ImageFuncs.get_image(0,1))
-        self.img_lst.append(self.ImageFuncs.get_image(1,2))
-        self.img_lst.append(self.ImageFuncs.get_image(0,3))
-        self.img_lst.append(self.ImageFuncs.get_image(2,2))
         menu_cursor_image = self.ImageFuncs.get_image(3, 1)
         menu_cursor_image.set_colorkey((255, 0, 255))
 
@@ -81,23 +76,21 @@ class Menu(object):
              linelst.append(contents[i].strip('\n'))
         for i in linelst:
             if i == '':
-                linelst.pop(linelst.index(i))
+                #linelst.pop(linelst.index(i))
+                pass
         open_file.close()
 
 
 
-        for i in self.img_lst:
-            i.set_colorkey((255,0,255))
-            index = self.img_lst.index(i)
-            screen.blit(i,(100, 100 + i.get_height() * index * 3))
-            txt = self.menu_font.render(linelst[index], True, (255, 255, 255))
+        for x, i in enumerate(linelst):
+            txt = self.footer_font.render(linelst[x], True, (255, 255, 255))
             txt_rect = txt.get_rect()
-            txt_rect.midleft = (160,117 + i.get_height() * index * 3)
+            txt_rect.midleft = (160, 50 + txt_rect.h * x * 1.5)
             screen.blit(txt,txt_rect)
 
         txt = self.menu_font.render("Press ESCAPE to go back", True, (255, 0, 255))
         txt_rect = txt.get_rect()
-        txt_rect.center = (500, 500)
+        txt_rect.center = (500, 550)
         screen.blit(txt,txt_rect)
         screen.blit(menu_cursor_image, (mouse_pos[0]-16, mouse_pos[1]-16))
 

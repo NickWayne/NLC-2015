@@ -103,7 +103,11 @@ def main():
                     current_state = "game"
                     pygame.mixer.music.stop()
                     main_world.game_over = False
-                    main_world.set_up_level(main_world.levels[main_world.level_index])
+                    try:
+                        main_world.set_up_level(main_world.levels[main_world.level_index])
+                    except IndexError:
+                        main_world.level_index = 0
+                        main_world.set_up_level(main_world.levels[main_world.level_index])
 
                 elif option == 2:
                     """level select"""
@@ -189,7 +193,9 @@ def main():
             screen.fill((0, 0, 0))
             main_world.render(screen)
 
-            pygame.display.set_caption("[FPS: {:.4}]".format(clock.get_fps()))
+            fps_string = "[FPS: {:.4}]".format(clock.get_fps())
+            caption_string = "Sector Shoot-em-up! Current level: " + main_world.levels[main_world.level_index] + ". " + fps_string 
+            pygame.display.set_caption(caption_string)
 
             if main_world.game_over:
                 current_state = "lose"

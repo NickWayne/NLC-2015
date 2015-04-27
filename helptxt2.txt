@@ -3,7 +3,7 @@
 Welcome to Nick and Nick's 2015 National Leadership Conference
 Game and Simulation competition submission - Sector Shoot-em-up!
 
-The game consits of *11* levels, followed by the boss level. At
+The game consits of 11 levels, followed by the boss level. At
 the end of each level, you will see a small green circle, which
 you must fly through to proceed to the next level.
 

@@ -59,7 +59,7 @@ class World(object):
 
         #self.levels = ["tutorial1", "tutorial2", "map", "testingSpawn", "virustest", "scary", "bossfight"]
         self.levels = ["level1", "level2", "level3", "level4", "level5", "level6", "level7", "level8", "level9", "level10", "level11", "bossfight"]
-        self.level_index = -4
+        self.level_index = 0
         level = self.levels[self.level_index]
 
         #self.set_up_level(level)
@@ -153,7 +153,11 @@ class World(object):
         if self.goal.check():
             self.sound_classes[0].play()
             self.level_index+=1
-            self.set_up_level(self.levels[self.level_index])
+            try:
+                self.set_up_level(self.levels[self.level_index])
+            except IndexError:
+                self.game_won = True
+                self.level_index = 0
             self.player.points += 100
         
         if self.player.health <= 0:
