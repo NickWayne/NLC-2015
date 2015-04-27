@@ -280,8 +280,8 @@ class World(object):
                 self.enemy_list.append(Virus(self, vec2(*pos)))
         enemy_file.close()
 
-    def instantiate_projectile(self, pos, angle, vel, bool_enemy, bool_player=False):
-        self.bullet_list.append(Shot(pos, angle, vel, bool_enemy, bool_player))
+    def instantiate_projectile(self, pos, angle, vel, bool_enemy, bool_player=False, bool_fire=False):
+        self.bullet_list.append(Shot(pos, angle, vel, bool_enemy, bool_player, bool_fire))
 
 
 class EndPoint(object):

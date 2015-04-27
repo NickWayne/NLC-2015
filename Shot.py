@@ -4,17 +4,18 @@ from math import degrees
 
 class Shot(object):
 
-    def __init__(self, pos, angle, vel, bool_enemy=True, bool_player = False):
+    def __init__(self, pos, angle, vel, bool_enemy=True, bool_player=False, bool_fire=False):
         self.pos = pos
         self.vel = vel
         self.angle = angle
         self.bool_enemy = bool_enemy
 
         self.life = 2
-        self.dead = False
-        
+        self.dead = False        
 
-        if bool_player:
+        if bool_fire:
+            self.img = pygame.image.load("res/fire.png").convert()
+        elif bool_player:
             self.img = pygame.image.load("res/disc.png").convert()
         else:
             self.img = pygame.image.load("res/bullet.png").convert()

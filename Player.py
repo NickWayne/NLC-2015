@@ -19,6 +19,9 @@ class Player(object):
         self.bullet_list = self.world.bullet_list
         self.reload_max = .15
         self.reload = self.reload_max
+
+        self.firewall_reload_max = 1
+        self.firewall_reload = self.firewall_reload_max
         self.mxy = vec2(0, 0)
         self.dxy = vec2(0, 0)
         self.rect = self.img.get_rect()
@@ -83,12 +86,30 @@ class Player(object):
             self.velocity -= vel * .0005
             self.reload = self.reload_max
 
+    def firewall(self, pos):
+        if self.firewall_reload <= 0:
+            
+            num_shots = 10
+            for i in xrange(num_shots):
+                angle = self.get_angle(pos) + math.radians(((num_shots / 2) - i) * (60.0 / num_shots))
+                vel = vec2(math.cos(angle), math.sin(angle)) * 500
+
+                x = self.pos.copy()[0] + (math.cos(angle) * 20)
+                y = self.pos.copy()[1] + (math.sin(angle) * 20)
+
+                self.world.instantiate_projectile((x, y), angle, vel, False, True, True)
+                #self.velocity -= vel * .0005
+            
+            self.firewall_reload = self.firewall_reload_max
+
     def move(self):
         self.pos.set_x(self.pos.get_x()+self.dxy.get_x())
         self.pos.set_y(self.pos.get_y()+self.dxy.get_y())
 
     def update(self, pos, movement, tick):
         self.reload -= tick
+        self.firewall_reload -= tick
+
         self.velocity *= .99
         self.velocity += movement.normalise() * self.acceleration * tick
         capped_vel = self.cap(self.velocity, -10, 10)

@@ -30,6 +30,8 @@ class Menu(object):
 
         self.img = pygame.image.load("res/base.png").convert()
         self.ImageFuncs = ImageFuncs.ImageFuncs(32,32,self.img)
+        
+        self.backdrop = pygame.image.load("res/backdrop.png").convert()
 
         self.text_rects.append(self.title_rect)
 
@@ -148,7 +150,7 @@ class Menu(object):
                     webbrowser.open_new(r"http://en.wikipedia.org/wiki/Spambot")
                 if option == 3:
                     self.clicked = True
-                    webbrowser.open_new(r"http://en.wikipedia.org/wiki/Web_Bot")
+                    webbrowser.open_new(r"http://en.wikipedia.org/wiki/Internet_bot")
 
     def level_select(self, surface, mouse_pos, tick, main_world):
         surface.fill((0, 0, 0))
@@ -210,6 +212,8 @@ class Menu(object):
 
     def render(self, surface):
         """Renders the text stored in the class to the screen"""
+
+        surface.blit(self.backdrop, (0, 0))
 
         surface.blit(self.title_render, self.title_rect)
 

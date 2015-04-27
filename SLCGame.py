@@ -185,6 +185,8 @@ def main():
             pressed_buttons = pygame.mouse.get_pressed()
             if pressed_buttons[0]:
                 main_world.player.shoot(mouse_pos)
+            if pressed_buttons[2]:
+                main_world.player.firewall(mouse_pos)
 
             """Update"""
             main_world.update(mouse_pos, movement, time_passed_seconds)
