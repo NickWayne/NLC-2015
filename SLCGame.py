@@ -145,7 +145,14 @@ def main():
             pygame.display.flip()
 
         elif current_state == "level select":
-            main_menu.level_select(screen, mouse_pos, time_passed_seconds, main_world)
+            selected_level = main_menu.level_select(screen, mouse_pos, time_passed_seconds, main_world)
+            if selected_level is not None:
+                current_state = "game"
+                main_world.game_over = False
+                pygame.mixer.music.stop()
+                main_world.set_up_level(selected_level)
+                main_world.level_index = main_world.levels.index(selected_level)
+
             pressed_keys = pygame.key.get_pressed()
             if pressed_keys[pygame.K_ESCAPE]:
                 current_state = "menu"

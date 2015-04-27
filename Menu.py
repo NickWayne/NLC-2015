@@ -39,7 +39,7 @@ class Menu(object):
             
             TEXT_rect = TEXT_render.get_rect()
             TEXT_rect.center = (500, 
-                    200 + TEXT_rect.h * TEXT_index * 3)
+                    150 + TEXT_rect.h * TEXT_index * 3)
 
             self.text_rects.append(TEXT_rect)
 
@@ -74,7 +74,7 @@ class Menu(object):
         menu_cursor_image = self.ImageFuncs.get_image(3, 1)
         menu_cursor_image.set_colorkey((255, 0, 255))
 
-        open_file = open("helptxt.txt", 'r')
+        open_file = open("helptxt2.txt", 'r')
         linelst =[]
         contents = open_file.readlines()
         for i in range(len(contents)):
@@ -164,7 +164,7 @@ class Menu(object):
         menu_cursor_image = self.ImageFuncs.get_image(3, 1)
         menu_cursor_image.set_colorkey((255, 0, 255))
  
-        to_return = False
+        to_return = None
 
         x = y = 0
         for i in main_world.levels:
@@ -180,6 +180,10 @@ class Menu(object):
             if x == 5:
                 x = 0
                 y += 1
+
+            pressed = pygame.mouse.get_pressed()
+            if pressed[0] and level_rect.collidepoint(mouse_pos):
+                to_return = i
         surface.blit(menu_cursor_image, (mouse_pos[0]-16, mouse_pos[1]-16))
 
         return to_return
@@ -222,7 +226,7 @@ class Menu(object):
             
             TEXT_rect = TEXT_render.get_rect()
             TEXT_rect.center = (500, 
-                    200 + TEXT_rect.h * TEXT_index * 3)
+                    150 + TEXT_rect.h * TEXT_index * 3)
 
             surface.blit(TEXT_render, TEXT_rect)
 
