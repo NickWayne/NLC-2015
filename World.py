@@ -55,6 +55,7 @@ class World(object):
 
         self.main_font = pygame.font.Font(None, 25)
         self.debug_text_on = False
+        self.tut = False
 
         #self.levels = ["tutorial1", "tutorial2", "map", "testingSpawn", "virustest", "scary", "bossfight"]
         self.levels = ["level1", "level2", "level3", "level4", "level5", "level6", "level7", "level8", "level9", "level10", "level11", "bossfight"]
@@ -133,8 +134,7 @@ class World(object):
             print ""
 
         if self.main_map.map_array[x][y].mask.overlap(self.player.mask, vec_to_int(offset)):
-            self.player.velocity *= -1
-            #pass
+            self.player.velocity = self.player.velocity.normalize() * -2
 
         for i in self.bullet_list:
             if i.bool_enemy == False:
@@ -146,7 +146,6 @@ class World(object):
                 i.get_mask()
                 if self.main_map.map_array[x][y].mask.overlap(i.mask, vec_to_int(offset)):
                     i.dead = True
-                    # self.sound_classes[1].play()
 
         movement = self.player.pos - old_pos
         self.main_camera.update(-movement)
@@ -156,10 +155,9 @@ class World(object):
             self.level_index+=1
             self.set_up_level(self.levels[self.level_index])
             self.player.points += 100
-
+        
         if self.player.health <= 0:
             self.game_over = True
-
 
         """delete any 'dead' bullets or enemies"""
         for dead_ent in to_remove:
@@ -193,9 +191,6 @@ class World(object):
         txt_rect = txt.get_rect()
         txt_rect.midleft = pos
         screen.blit(txt,txt_rect)
-
-
-
 
     def render(self, surface):
 
@@ -237,10 +232,11 @@ class World(object):
         self.main_map.update()
 
         self.main_camera.offset = vec2(self.ss[0]/2, self.ss[1]/2)
-        try :
+        try:
             pts = self.player.points
         except Exception:
             pass
+
         self.player = Player(self, self.player_image, (0, 0))
         self.player.points = pts
         self.goal = EndPoint(vec2(0,0), self)
@@ -279,6 +275,7 @@ class World(object):
             elif e_type == 'v':
                 self.enemy_list.append(Virus(self, vec2(*pos)))
         enemy_file.close()
+
     def instantiate_projectile(self, pos, angle, vel, bool_enemy, bool_player=False):
         self.bullet_list.append(Shot(pos, angle, vel, bool_enemy, bool_player))
 

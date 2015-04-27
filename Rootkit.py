@@ -14,7 +14,7 @@ class Rootkit(BaseEnemy):
         self.imagefuncs = ImageFuncs(32,32,world.base_image)
         self.lst = self.imagefuncs.get_images(2,0,2)
         self.max_range = 350
-        self.attacking_range = 150
+        self.attacking_range = 200
         self.scared_range = 0
 
         self.dead = False
@@ -78,6 +78,8 @@ class Attacking(State):
         self.enemy.target = self.player
 
     def do_actions(self, tick):
+        magnitude = vec2(self.enemy.pos - self.enemy.target.pos).get_magnitude()
+        self.enemy.img.set_alpha(200 - magnitude)
         self.enemy.velocity += self.enemy.get_vector_to_target() * self.enemy.acceleration * tick
 
     def check_conditions(self):

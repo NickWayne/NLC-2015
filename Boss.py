@@ -108,7 +108,7 @@ class Attacking(State):
             dy = self.enemy.pos.y - self.player.pos.y
             for i in xrange(25):
                     angle = random.randint(0,360)
-                    vel = vec2(cos(angle), sin(angle))*-350
+                    vel = vec2(cos(angle), sin(angle))*-300
                     self.enemy.bullet_list.append(Shot.Shot(self.enemy.pos.copy(), angle, vel))
             self.enemy.reload = self.enemy.reload_max
         if self.enemy.animate == False:

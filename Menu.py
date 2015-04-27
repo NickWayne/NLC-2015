@@ -172,7 +172,7 @@ class Menu(object):
             level_img.fill((200, 200, 200))
 
             level_rect = level_img.get_rect()
-            level_img.blit(self.in_between_font.render(i, True, (255, 255, 255)), (2, 2))
+            level_img.blit(self.in_between_font.render(i, True, (20, 20, 20)), (2, 2))
             level_rect.center = (128 + 160 * x, 128 + 160 * y)
             surface.blit(level_img, level_rect)
 

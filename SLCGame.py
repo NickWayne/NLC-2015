@@ -97,18 +97,20 @@ def main():
             option = main_menu.handle_mouse_input(mouse_pos, pygame.mouse.get_pressed())
             if option is not None:
                 main_world.sound_classes[0].play()
+
                 if option == 1:
                     """start"""
                     current_state = "game"
                     pygame.mixer.music.stop()
                     main_world.game_over = False
-                    main_world.level_index = 0
                     main_world.set_up_level(main_world.levels[main_world.level_index])
 
                 elif option == 2:
+                    """level select"""
                     current_state = "level select"
 
                 elif option == 3:
+                    """help"""
                     current_state = "help"
 
                 elif option == 4:
@@ -116,10 +118,11 @@ def main():
                     current_state = "links"
 
                 elif option == 5:
-                    """links"""
+                    """credits"""
                     current_state = "credits"
 
                 elif option == 6:
+                    """quit"""
                     done = True
 
             main_menu.render(screen)
