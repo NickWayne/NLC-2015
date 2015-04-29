@@ -25,8 +25,8 @@ class World(object):
         self.music_files = glob.glob("res/music/*.ogg")
         self.sound_files = glob.glob("res/sounds/*.ogg")
 
-        self.credit_music = glob.glob("res/music/credits/*.mp3")
-        self.intro_music = glob.glob("res/music/menu/*.mp3")
+        self.credit_music = glob.glob("res/music/credits/*.ogg")
+        self.intro_music = glob.glob("res/music/menu/*.ogg")
 
 
         self.sound_classes = [pygame.mixer.Sound(i) for i in self.sound_files]
