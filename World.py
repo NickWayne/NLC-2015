@@ -22,7 +22,7 @@ class World(object):
         self.ss = screen_size
 
         pygame.mixer.init()
-        self.music_files = glob.glob("res/music/*.mp3")
+        self.music_files = glob.glob("res/music/*.ogg")
         self.sound_files = glob.glob("res/sounds/*.ogg")
 
         self.credit_music = glob.glob("res/music/credits/*.mp3")
@@ -146,6 +146,7 @@ class World(object):
                 i.get_mask()
                 if self.main_map.map_array[x][y].mask.overlap(i.mask, vec_to_int(offset)):
                     i.dead = True
+                    #i.vel *= -1
 
         movement = self.player.pos - old_pos
         self.main_camera.update(-movement)

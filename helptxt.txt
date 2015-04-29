@@ -1,7 +1,0 @@
-VIRUS - replicates itself to slow down your system and damage you when it hits you
-
-ROOTKIT - Placeholder txt
-
-SPAM - spam bot that spams you with emails, watch out for its mail spam
-
-WEB BOT BOSS - Placeholder txt
