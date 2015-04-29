@@ -17,7 +17,8 @@ class Menu(object):
 
         self.texts = ["START", "LEVEL SELECT", "HELP", "LINKS", "CREDITS", "QUIT"]
 
-        self.title = "NLC Game and Simulation Submission - 2015"
+        #self.title = "NLC Game and Simulation Submission - 2015"
+        self.title = "Sector Shoot 'em up - NLC Submission 2015"
 
         self.footer = "Open source project. NickandNicksGames 2015"
 
@@ -166,7 +167,7 @@ class Menu(object):
             level_img.fill((200, 200, 200))
 
             level_rect = level_img.get_rect()
-            level_img.blit(self.in_between_font.render(i, True, (20, 20, 20)), (2, 2))
+            level_img.blit(self.in_between_font.render(i.title(), True, (20, 20, 20)), (2, 2))
             level_rect.center = (128 + 160 * x, 128 + 160 * y)
             surface.blit(level_img, level_rect)
 

@@ -22,6 +22,11 @@ class Player(object):
 
         self.firewall_reload_max = 1
         self.firewall_reload = self.firewall_reload_max
+
+        self.num_fullscan = 5
+        self.fullscan_reload_max = 1
+        self.fullscan_reload = self.fullscan_reload_max
+
         self.mxy = vec2(0, 0)
         self.dxy = vec2(0, 0)
         self.rect = self.img.get_rect()
@@ -102,6 +107,22 @@ class Player(object):
             
             self.firewall_reload = self.firewall_reload_max
 
+    def fullscan(self, pos):
+        if self.num_fullscan > 0 and self.fullscan_reload <= 0:
+
+            num_shots = 200
+            for i in xrange(num_shots):
+                angle = math.radians(((num_shots / 2) - i) * 360.0 / num_shots)
+                vel = vec2(math.cos(angle), math.sin(angle)) * 500
+
+                x = self.pos.copy()[0] + (math.cos(angle) * 20)
+                y = self.pos.copy()[1] + (math.sin(angle) * 20)
+
+                self.world.instantiate_projectile((x, y), angle, vel, False, True, False)
+
+            self.num_fullscan -= 1
+            self.fullscan_reload = self.fullscan_reload_max
+
     def move(self):
         self.pos.set_x(self.pos.get_x()+self.dxy.get_x())
         self.pos.set_y(self.pos.get_y()+self.dxy.get_y())
@@ -109,6 +130,7 @@ class Player(object):
     def update(self, pos, movement, tick):
         self.reload -= tick
         self.firewall_reload -= tick
+        self.fullscan_reload -= tick
 
         self.velocity *= .99
         self.velocity += movement.normalise() * self.acceleration * tick

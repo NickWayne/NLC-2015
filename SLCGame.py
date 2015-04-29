@@ -182,6 +182,9 @@ def main():
             if pressed_keys[pygame.K_s]:
                 movement.y += 1
 
+            if pressed_keys[pygame.K_SPACE]:
+                main_world.player.fullscan(mouse_pos)
+
             pressed_buttons = pygame.mouse.get_pressed()
             if pressed_buttons[0]:
                 main_world.player.shoot(mouse_pos)

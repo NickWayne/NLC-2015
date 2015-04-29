@@ -1,7 +1,7 @@
 NLC 2015, Game and Simulation Project / Presentation
-"Malware Shm'up"
+"Sector Shoot 'em up"
 
-Lebanon High School chapter
+Lebanon High School FBLA chapter
 
 Designed, coded, and created by Nick Jarvis and Nick Wayne
 

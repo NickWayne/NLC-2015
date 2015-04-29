@@ -57,8 +57,7 @@ class World(object):
         self.debug_text_on = False
         self.tut = False
 
-        #self.levels = ["tutorial1", "tutorial2", "map", "testingSpawn", "virustest", "scary", "bossfight"]
-        self.levels = ["level1", "level2", "level3", "level4", "level5", "level6", "level7", "level8", "level9", "level10", "level11", "bossfight"]
+        self.levels = ["level1", "level2", "level3", "level4", "level5", "level6", "level7", "level8", "level9", "level10", "level11", "boss"]
         self.level_index = 0
         level = self.levels[self.level_index]
 
