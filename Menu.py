@@ -40,7 +40,7 @@ class Menu(object):
             TEXT_index = self.texts.index(TEXT)
             
             TEXT_rect = TEXT_render.get_rect()
-            TEXT_rect.center = (500, 
+            TEXT_rect.center = (500,
                     150 + TEXT_rect.h * TEXT_index * 3)
 
             self.text_rects.append(TEXT_rect)
@@ -137,20 +137,19 @@ class Menu(object):
         screen.blit(menu_cursor_image, (mouse_pos[0]-16, mouse_pos[1]-16))
 
         option = self.handle_mouse_input(mouse_pos, pygame.mouse.get_pressed(),True,text_rects)
-        for event in pygame.event.get():
-            if option is not None and event.type == pygame.MOUSEBUTTONUP:
-                if option == 0:
-                    self.clicked = True
-                    webbrowser.open_new(r"http://en.wikipedia.org/wiki/Computer_virus")
-                if option == 1:
-                    self.clicked = True
-                    webbrowser.open_new(r"http://en.wikipedia.org/wiki/Rootkit")
-                if option == 2:
-                    self.clicked = True
-                    webbrowser.open_new(r"http://en.wikipedia.org/wiki/Spambot")
-                if option == 3:
-                    self.clicked = True
-                    webbrowser.open_new(r"http://en.wikipedia.org/wiki/Internet_bot")
+        if option is not None:
+            if option == 0:
+                webbrowser.open_new(r"http://en.wikipedia.org/wiki/Computer_virus")
+                return "link"
+            if option == 1:
+                webbrowser.open_new(r"http://en.wikipedia.org/wiki/Rootkit")
+                return "link"
+            if option == 2:
+                webbrowser.open_new(r"http://en.wikipedia.org/wiki/Spambot")
+                return "link"
+            if option == 3:
+                webbrowser.open_new(r"http://en.wikipedia.org/wiki/Web_Bot")
+                return "link"
 
     def level_select(self, surface, mouse_pos, tick, main_world):
         surface.fill((0, 0, 0))

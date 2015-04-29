@@ -12,7 +12,6 @@ from vector2 import Vector2 as vec2
 from World import World
 import random
 from Menu import Menu
-import webbrowser
 """
 PROMPT:
 
@@ -142,7 +141,8 @@ def main():
             pygame.display.flip()
 
         elif current_state == "links":
-            main_menu.links(screen,mouse_pos,time_passed_seconds)
+            if main_menu.links(screen,mouse_pos,time_passed_seconds) == "link":
+                current_state = "menu"
             pressed_keys = pygame.key.get_pressed()
             if pressed_keys[pygame.K_ESCAPE]:
                 current_state = "menu"

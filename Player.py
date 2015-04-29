@@ -83,7 +83,7 @@ class Player(object):
             y = self.pos.copy()[1]+(math.sin(angle)*20)
 
             self.world.instantiate_projectile((x,y), angle, vel, False, True)
-            self.velocity -= vel * .0005
+            self.velocity -= vel * .0003
             self.reload = self.reload_max
 
     def firewall(self, pos):
