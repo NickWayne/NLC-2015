@@ -57,7 +57,7 @@ class World(object):
         self.debug_text_on = False
         self.tut = False
 
-        self.levels = ["level1", "level2", "level3", "level4", "level5", "level6", "level7", "level8", "level9", "level10", "level11", "boss", "ridiculous"]
+        self.levels = ["level1", "level2", "level3", "level4", "level5", "level6", "level7", "level8", "level9", "level10", "level11", "boss", "ridiculous", "level12"]
         self.level_index = 0
         level = self.levels[self.level_index]
 
@@ -84,7 +84,7 @@ class World(object):
                     self.player.health -= 5
             else:
                 for enemy in self.enemy_list:
-                    if bullet.rect.colliderect(enemy.rect):
+                    if bullet.rect.colliderect(enemy.rect) and not enemy.dead:
                         bullet.dead = True
                         enemy.health -= 10
                         enemy.hit_this_frame = True

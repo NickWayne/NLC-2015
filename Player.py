@@ -103,7 +103,7 @@ class Player(object):
                 y = self.pos.copy()[1] + (math.sin(angle) * 20)
 
                 self.world.instantiate_projectile((x, y), angle, vel, False, True, True)
-                #self.velocity -= vel * .0005
+                self.velocity -= vel * .0005
             
             self.firewall_reload = self.firewall_reload_max
 
