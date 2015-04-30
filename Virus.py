@@ -17,7 +17,7 @@ class Virus(BaseEnemy):
         BaseEnemy.__init__(self, world, pos)
         
         """Base variables"""
-        self.max_range = 350
+        self.max_range = 650
         self.attacking_range = 350
         self.scared_range = 0
         self.ranged = False

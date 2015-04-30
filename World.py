@@ -201,6 +201,9 @@ class World(object):
         txt_rect.midleft = pos
         screen.blit(txt,txt_rect)
 
+        pygame.draw.rect(screen, (0, 0, 0), (self.ss[0] - 120, self.ss[1] - 75, 100, 20))
+        pygame.draw.rect(screen, (255, 127, 0), (self.ss[0] - 120, self.ss[1] - 75, 100 * (min(self.player.firewall_reload_max - self.player.firewall_reload, self.player.firewall_reload_max) / float(self.player.firewall_reload_max)), 20))
+
     def render(self, surface):
 
         #surface.blit(self.back,(-500,-500))

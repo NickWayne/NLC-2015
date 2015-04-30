@@ -54,11 +54,15 @@ class Menu(object):
         
         self.text_rects.append(self.footer_rect)
 
+        self.draw_rect = None
+
     def handle_mouse_input(self, pos, buttons, help = False, rects = []):
         if help == False:
-            if buttons[0]:
-                for RECT in self.text_rects:
-                    if RECT.collidepoint(pos):
+            self.draw_rect = None
+            for RECT in self.text_rects:
+                if RECT.collidepoint(pos):
+                    self.draw_rect = RECT
+                    if buttons[0]:
                         return self.text_rects.index(RECT)
 
         else:
@@ -90,7 +94,7 @@ class Menu(object):
         for x, i in enumerate(linelst):
             txt = self.footer_font.render(linelst[x], True, (255, 255, 255))
             txt_rect = txt.get_rect()
-            txt_rect.midleft = (160, 50 + txt_rect.h * x * 1.5)
+            txt_rect.center = (self.w / 2, 50 + txt_rect.h * x * 1.5)
             screen.blit(txt,txt_rect)
 
         txt = self.menu_font.render("Press ESCAPE to go back", True, (255, 0, 255))
@@ -230,3 +234,6 @@ class Menu(object):
             surface.blit(TEXT_render, TEXT_rect)
 
         surface.blit(self.footer_render, self.footer_rect)
+
+        if self.draw_rect is not None:
+            pygame.draw.rect(surface, (255, 255, 255), self.draw_rect.inflate(6, 6), 2)

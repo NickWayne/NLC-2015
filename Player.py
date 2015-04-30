@@ -20,10 +20,10 @@ class Player(object):
         self.reload_max = .15
         self.reload = self.reload_max
 
-        self.firewall_reload_max = 1
+        self.firewall_reload_max = 5
         self.firewall_reload = self.firewall_reload_max
 
-        self.num_fullscan = 5
+        self.num_fullscan = 1
         self.fullscan_reload_max = 1
         self.fullscan_reload = self.fullscan_reload_max
 
@@ -110,7 +110,7 @@ class Player(object):
     def fullscan(self, pos):
         if self.num_fullscan > 0 and self.fullscan_reload <= 0:
 
-            num_shots = 200
+            num_shots = 500
             for i in xrange(num_shots):
                 angle = math.radians(((num_shots / 2) - i) * 360.0 / num_shots)
                 vel = vec2(math.cos(angle), math.sin(angle)) * 500

@@ -18,7 +18,7 @@ class Spam(BaseEnemy):
         self.ani = ani.Ani(6, .2)
         self.imagefuncs = ImageFuncs(32,32,world.base_image)
         self.lst = self.imagefuncs.get_images(6,0,3)
-        self.max_range = 350
+        self.max_range = 650
         self.attacking_range = 300
         self.scared_range = 250
         self.reload_max = 2

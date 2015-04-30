@@ -54,6 +54,7 @@ class Sneaking(State):
     def entry_actions(self):
         self.enemy.img = self.enemy.lst[0]
         self.enemy.img.set_colorkey((255,0,255))
+        self.enemy.img.set_alpha(0)
         self.enemy.target = self.player
 
     def exit_actions(self):
