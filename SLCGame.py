@@ -25,7 +25,8 @@ Take note in design to include computer networking structure and devices.
 """
 
 def main():
-    screen_size = w, h = (1000,600)
+    #screen_size = w, h = (1000,600)
+    screen_size = w, h = (1366, 768)
     """screen_size"""
 
     screen = pygame.display.set_mode(screen_size)
@@ -40,7 +41,7 @@ def main():
     menu_cursor_image = main_world.image_funcs.get_image(3, 1)
     menu_cursor_image.set_colorkey((255, 0, 255))
 
-    main_menu = Menu()
+    main_menu = Menu(screen_size)
 
     clock = pygame.time.Clock()
     """set up the game clock"""

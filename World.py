@@ -19,7 +19,7 @@ class World(object):
 
     def __init__(self, screen_size):
 
-        self.ss = screen_size
+        self.ss = self.w, self.h = screen_size
 
         pygame.mixer.init()
         self.music_files = glob.glob("res/music/*.ogg")
@@ -62,10 +62,10 @@ class World(object):
         level = self.levels[self.level_index]
 
         #self.set_up_level(level)
-        self.back = pygame.image.load("res/back.png").convert()
-        self.UI = pygame.image.load("res/UI.png").convert()
+        #self.back = pygame.image.load("res/back.png").convert()
+        self.UI = pygame.image.load("res/UI2.png").convert()
         self.UI.set_colorkey((255,0,255))
-        self.world_rect = pygame.Rect((0,0),(1000,600))
+        self.world_rect = pygame.Rect((0, 0), self.ss)
 
     def update(self, mouse_pos, movement, tick, to_debug=False):
         """Updates all entities and shots. takes1
@@ -73,7 +73,7 @@ class World(object):
             the player movement vector, and the
             time passed since the last frame."""
 
-        self.world_rect = pygame.Rect((-self.main_camera.offset.x, -self.main_camera.offset.y), (1000, 600))
+        self.world_rect = pygame.Rect((-self.main_camera.offset.x, -self.main_camera.offset.y), self.ss)
 
         to_remove = []
 
@@ -91,8 +91,8 @@ class World(object):
                         self.sound_classes[3].play()
                         if enemy.health <= 0:
                             enemy.dead = True
-                            # if
-                            self.player.points += 5
+                            self.player.points += 10
+
             bullet.update(tick)
             if bullet.dead:
                 to_remove.append(bullet)
@@ -108,8 +108,10 @@ class World(object):
                         enemy.pos.y % self.main_map.each_size)
 
             if self.main_map.map_array[x][y].mask.overlap(enemy.mask, vec_to_int(offset)):
-                enemy.velocity = enemy.velocity.normalize() * -5
-                enemy.target = RoamPoint(enemy.get_vector_to_target().normalize() * -150)
+                enemy.pos -= enemy.velocity.normalize() * 15
+                enemy.velocity = enemy.velocity.normalize() * -3
+                if enemy.target != self.player:
+                    enemy.target = RoamPoint(enemy.get_vector_to_target().normalize() * -150)
 
             if enemy.dead:
                 to_remove.append(enemy)
@@ -133,7 +135,9 @@ class World(object):
             print ""
 
         if self.main_map.map_array[x][y].mask.overlap(self.player.mask, vec_to_int(offset)):
+            self.player.pos -= self.player.velocity.normalize() * 15
             self.player.velocity = self.player.velocity.normalize() * -2
+
 
         for i in self.bullet_list:
             if i.bool_enemy == False:
@@ -179,17 +183,18 @@ class World(object):
 
     def phealth_bar(self, screen):
         font = pygame.font.Font(None, 15)
-        pos = (20,550)
+        pos = (20,self.h - 50)
         w,h = (100,20)
+        pygame.draw.rect(screen, (100, 100, 100), (0, self.h - 75, 250, 75))
         pygame.draw.rect(screen,(255,0,0),((pos),(w,h)),0)
         pygame.draw.rect(screen,(0,255,0),((pos),(w*(self.player.health/float(self.player.health_max)),h)),0)
         string = "%s/%s" %(self.player.health,self.player.health_max)
         txt = self.main_font.render(str(string), True, (8,59,47))
         txt_rect = txt.get_rect()
-        txt_rect.midleft = (20,580)
+        txt_rect.midleft = (20, self.h - 20)
         screen.blit(txt,txt_rect)
 
-        pos = (130,560)
+        pos = (130, self.h - 40)
         string = "Points : %s" %(self.player.points)
         txt = self.main_font.render(str(string), True, (8,59,47))
         txt_rect = txt.get_rect()
@@ -198,7 +203,7 @@ class World(object):
 
     def render(self, surface):
 
-        surface.blit(self.back,(-500,-500))
+        #surface.blit(self.back,(-500,-500))
         self.main_map.render(surface, self.main_camera)
 
         for bullet in self.bullet_list:
@@ -212,7 +217,7 @@ class World(object):
 
         self.goal.render(surface)
 
-        surface.blit(self.UI,(0,0))
+        #surface.blit(self.UI,(0,0))
         self.phealth_bar(surface)
 
         mouse_pos = pygame.mouse.get_pos()
@@ -225,8 +230,6 @@ class World(object):
         self.game_won = False
         
         self.map_filename = "maps/"+level_name+".txt"
-        self.marching_image = pygame.image.load("maps/MapImage.png").convert()
-        self.marching_image.set_colorkey((255, 0, 255))
         self.marching_images = ["maps/tilemap1.png","maps/tilemap2.png", "maps/tilemap3.png"]
         for i in self.marching_images:
             a = pygame.image.load(i).convert()

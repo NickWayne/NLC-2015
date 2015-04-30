@@ -7,9 +7,11 @@ class Menu(object):
         storing and blitting text to handling
         input."""
 
-    def __init__(self):
+    def __init__(self, ss):
         """Creates the Menu, pretty self-explainitory"""
         
+        self.w, self.h = ss
+
         self.menu_font = pygame.font.Font("pixelFont.ttf", 25)
         self.header_font = pygame.font.Font("pixelFont.ttf", 32)
         self.footer_font = pygame.font.Font("pixelFont.ttf", 16)
@@ -25,7 +27,7 @@ class Menu(object):
         self.text_rects = []
         self.title_render = self.header_font.render(self.title, True, (255, 255, 255))
         self.title_rect = self.title_render.get_rect()
-        self.title_rect.center = (500, self.title_rect.h)
+        self.title_rect.center = (self.w / 2, self.title_rect.h)
         self.clicked = False
         self.clicked_time = 0
 
@@ -41,14 +43,14 @@ class Menu(object):
             TEXT_index = self.texts.index(TEXT)
             
             TEXT_rect = TEXT_render.get_rect()
-            TEXT_rect.center = (500,
+            TEXT_rect.center = (self.w / 2,
                     150 + TEXT_rect.h * TEXT_index * 3)
 
             self.text_rects.append(TEXT_rect)
 
         self.footer_render = self.footer_font.render(self.footer, True, (255, 255, 255))
         self.footer_rect = self.footer_render.get_rect()
-        self.footer_rect.center = (500, 600 - self.footer_rect.h)
+        self.footer_rect.center = (self.w / 2, self.h - self.footer_rect.h)
         
         self.text_rects.append(self.footer_rect)
 
@@ -93,7 +95,7 @@ class Menu(object):
 
         txt = self.menu_font.render("Press ESCAPE to go back", True, (255, 0, 255))
         txt_rect = txt.get_rect()
-        txt_rect.center = (500, 550)
+        txt_rect.center = (self.w / 2, self.h - 50)
         screen.blit(txt,txt_rect)
         screen.blit(menu_cursor_image, (mouse_pos[0]-16, mouse_pos[1]-16))
 
@@ -133,7 +135,7 @@ class Menu(object):
 
         txt = self.menu_font.render("Press ESCAPE to go back", True, (255, 0, 255))
         txt_rect = txt.get_rect()
-        txt_rect.center = (500, 500)
+        txt_rect.center = (self.w / 2, self.h - 50)
         screen.blit(txt,txt_rect)
         screen.blit(menu_cursor_image, (mouse_pos[0]-16, mouse_pos[1]-16))
 
@@ -149,7 +151,7 @@ class Menu(object):
                 webbrowser.open_new(r"http://en.wikipedia.org/wiki/Spambot")
                 return "link"
             if option == 3:
-                webbrowser.open_new(r"http://en.wikipedia.org/wiki/Web_Bot")
+                webbrowser.open_new(r"http://en.wikipedia.org/wiki/Botnet")
                 return "link"
 
     def level_select(self, surface, mouse_pos, tick, main_world):
@@ -205,7 +207,7 @@ class Menu(object):
 
         txt = self.menu_font.render("Press ESCAPE to go back", True, (255, 0, 255))
         txt_rect = txt.get_rect()
-        txt_rect.center = (500, 500)
+        txt_rect.center = (self.w / 2, self.h - 50)
         surface.blit(txt,txt_rect)
 
         surface.blit(menu_cursor_image, (mouse_pos[0]-16, mouse_pos[1]-16))
@@ -222,7 +224,7 @@ class Menu(object):
             TEXT_index = self.texts.index(TEXT)
             
             TEXT_rect = TEXT_render.get_rect()
-            TEXT_rect.center = (500, 
+            TEXT_rect.center = (self.w / 2, 
                     150 + TEXT_rect.h * TEXT_index * 3)
 
             surface.blit(TEXT_render, TEXT_rect)
