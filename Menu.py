@@ -78,7 +78,7 @@ class Menu(object):
         menu_cursor_image = self.ImageFuncs.get_image(3, 1)
         menu_cursor_image.set_colorkey((255, 0, 255))
 
-        open_file = open("helptxt2.txt", 'r')
+        open_file = open("text files/helptxt2.txt", 'r')
         linelst =[]
         contents = open_file.readlines()
         for i in range(len(contents)):
@@ -114,7 +114,7 @@ class Menu(object):
         menu_cursor_image = self.ImageFuncs.get_image(3, 1)
         menu_cursor_image.set_colorkey((255, 0, 255))
 
-        open_file = open("links.txt", 'r')
+        open_file = open("text files/links.txt", 'r')
         linelst =[]
         text_rects = []
         contents = open_file.readlines()
@@ -193,7 +193,7 @@ class Menu(object):
         surface.fill((0,0,0))
         menu_cursor_image = self.ImageFuncs.get_image(3, 1)
         menu_cursor_image.set_colorkey((255, 0, 255))
-        open_file = open("credits.txt", 'r')
+        open_file = open("text files/credits.txt", 'r')
         linelst =[]
         contents = open_file.readlines()
         for i in range(len(contents)):
