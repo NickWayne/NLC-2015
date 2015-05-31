@@ -139,17 +139,17 @@ class World(object):
             self.player.velocity = self.player.velocity.normalize() * -2
 
 
-        for i in self.bullet_list:
-            if i.bool_enemy == False:
-                x, y = (int(i.pos.x // self.main_map.each_size),
-                        int(i.pos.y // self.main_map.each_size))
+        for bullet in self.bullet_list:
+            if bullet.bool_enemy == False:
+                x, y = (int(bullet.pos.x // self.main_map.each_size),
+                        int(bullet.pos.y // self.main_map.each_size))
 
-                offset = vec2(i.pos.x % self.main_map.each_size,
-                            i.pos.y % self.main_map.each_size)
-                i.get_mask()
-                if self.main_map.map_array[x][y].mask.overlap(i.mask, vec_to_int(offset)):
-                    i.dead = True
-                    #i.vel *= -1
+                offset = vec2(bullet.pos.x % self.main_map.each_size,
+                            bullet.pos.y % self.main_map.each_size)
+                bullet.get_mask()
+                if self.main_map.map_array[x][y].mask.overlap(bullet.mask, vec_to_int(offset)):
+                    # bullet.dead = True
+                    bullet.vel -= bullet.vel
 
         movement = self.player.pos - old_pos
         self.main_camera.update(-movement)

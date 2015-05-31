@@ -37,13 +37,6 @@ class WorldMap(object):
             for tile in tile_list:
                 tile.update(self.map_array)
 
-    def test_collisions(self, other_mask, other_pos):
-        for tile_list in self.map_array:
-            for tile in tile_list:
-                if tile.test_collision(other_mask, other_pos):
-                    return True
-        return False
-
     def test_collisions_point(self, pos):
         updated_pos = (int(pos[0]), int(pos[1]))
         for tile_list in self.map_array:
@@ -101,11 +94,6 @@ class WorldMap(object):
             self.img = pygame.transform.scale(self.total_images[a].subsurface(new_x*32, new_y*32, 32, 32), (size, size))
             self.mask = pygame.mask.from_surface(self.img)
             self.rect = self.img.get_rect()
-
-        def test_collision(self, other_mask, other_pos):
-            offset = (int(other_pos.x)-(self.pos[0])*self.grand_size,
-                      int(other_pos.y) - (self.pos[1])*self.grand_size)
-            return self.mask.overlap(other_mask, offset)
 
         def test_collision_point(self, point):
             offset = (  int(point[0]) - (self.pos[0]) * self.grand_size,
