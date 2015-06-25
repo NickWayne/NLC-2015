@@ -15,6 +15,8 @@ import random
 import glob
 from Enemies import RoamPoint
 
+PLAY_MUSIC = False
+
 class World(object):
 
     def __init__(self, screen_size):
@@ -34,8 +36,9 @@ class World(object):
             SOUND.set_volume(0.5)
         number = random.randint(0, len(self.music_files)-1)
         
-        pygame.mixer.music.load(self.intro_music[0])
-        pygame.mixer.music.play(-1)
+        if PLAY_MUSIC:
+            pygame.mixer.music.load(self.intro_music[0])
+            pygame.mixer.music.play(-1)
 
         self.base_image = pygame.image.load("res/base.png").convert()
         self.image_funcs = ImageFuncs(32, 32, self.base_image)
@@ -148,8 +151,8 @@ class World(object):
                             bullet.pos.y % self.main_map.each_size)
                 bullet.get_mask()
                 if self.main_map.map_array[x][y].mask.overlap(bullet.mask, vec_to_int(offset)):
-                    # bullet.dead = True
-                    bullet.vel -= bullet.vel
+                    bullet.dead = True
+                    #bullet.vel -= bullet.vel
 
         movement = self.player.pos - old_pos
         self.main_camera.update(-movement)
