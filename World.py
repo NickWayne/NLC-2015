@@ -15,6 +15,7 @@ import random
 import glob
 from Enemies import RoamPoint
 
+global PLAY_MUSIC
 PLAY_MUSIC = False
 
 class World(object):
@@ -181,8 +182,9 @@ class World(object):
                 self.enemy_list.remove(dead_ent)
 
         if not pygame.mixer.music.get_busy():
-            pygame.mixer.music.load(self.music_files[random.randint(0, len(self.music_files)-1)])
-            pygame.mixer.music.play()
+            if PLAY_MUSIC:
+                pygame.mixer.music.load(self.music_files[random.randint(0, len(self.music_files)-1)])
+                pygame.mixer.music.play()
 
     def phealth_bar(self, screen):
         font = pygame.font.Font(None, 15)
