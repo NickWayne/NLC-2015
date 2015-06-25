@@ -60,7 +60,7 @@ class Menu(object):
         if help == False:
             self.draw_rect = None
             for RECT in self.text_rects:
-                if RECT.collidepoint(pos):
+                if RECT.inflate(self.text_rects[2].w - RECT.w, 50).collidepoint(pos) and len(self.text_rects)-1 > self.text_rects.index(RECT) > 0:
                     self.draw_rect = RECT
                     if buttons[0]:
                         return self.text_rects.index(RECT)
@@ -236,4 +236,4 @@ class Menu(object):
         surface.blit(self.footer_render, self.footer_rect)
 
         if self.draw_rect is not None:
-            pygame.draw.rect(surface, (255, 255, 255), self.draw_rect.inflate(6, 6), 2)
+            pygame.draw.rect(surface, (255, 255, 255), self.draw_rect.inflate((self.text_rects[2].w + 30) - self.draw_rect.w, 50), 2)
